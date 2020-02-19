@@ -1,4 +1,4 @@
-/*package com.foodplanner.rest_service;
+package com.foodplanner.rest_service;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -32,4 +32,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(new BCryptPasswordEncoder())
                 .passwordAttribute("userPassword");
     }
-}*/
+}
