@@ -2,10 +2,7 @@ package com.foodplanner.rest_service.controller;
 
 
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 // Plaats boven elke class die functies bevat een @Controller tag.
