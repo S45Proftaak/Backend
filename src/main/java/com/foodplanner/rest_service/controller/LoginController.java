@@ -12,4 +12,6 @@ public class LoginController {
         return "Welcome to the home page!";
     }
 
+
+
 }
