@@ -1,6 +1,8 @@
 package com.foodplanner.rest_service.controller;
 
 
+import com.foodplanner.rest_service.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 public class BasicController {
 
 
+    @Autowired
+    private UserRepository repo;
     /*
         Dit is een simpele get request.
         De GetMapping is zodat spring weet dat dit een get request is en de value is het pad naar deze functie.
@@ -27,5 +31,4 @@ public class BasicController {
     public String getid(@RequestParam String id){
         return id;
     }
-
 }

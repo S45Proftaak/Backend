@@ -12,6 +12,8 @@ public class FoodOrder {
     private Date date;
     private byte toLate;
 
+    //region id
+
     @Id
     @Column(name = "id")
     public int getId() {
@@ -21,6 +23,10 @@ public class FoodOrder {
     public void setId(int id) {
         this.id = id;
     }
+
+    //endregion
+
+    //region meal one to one
 
     @OneToOne(optional = false)
     @JoinColumn(name = "meal", referencedColumnName = "id")
@@ -34,6 +40,10 @@ public class FoodOrder {
         this.meal = meal;
     }
 
+    //endregion
+
+    //region user many to one
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "userid")
     public User getUserid() {
@@ -43,6 +53,10 @@ public class FoodOrder {
     public void setUserid(User userid) {
         this.userid = userid;
     }
+
+    //endregion
+
+    //region date
 
     @Basic
     @Column(name = "date")
@@ -54,6 +68,10 @@ public class FoodOrder {
         this.date = date;
     }
 
+    //endregion
+
+    //region tolate
+
     @Basic
     @Column(name = "to_late")
     public byte getToLate() {
@@ -63,6 +81,10 @@ public class FoodOrder {
     public void setToLate(byte toLate) {
         this.toLate = toLate;
     }
+
+    //endregion
+
+    //region overrides
 
     @Override
     public boolean equals(Object o) {
@@ -79,4 +101,7 @@ public class FoodOrder {
     public int hashCode() {
         return Objects.hash(id, userid, date, toLate);
     }
+
+    //endregion
+
 }
