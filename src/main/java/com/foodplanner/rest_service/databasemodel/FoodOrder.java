@@ -8,7 +8,7 @@ import java.util.Objects;
 @Table(name = "food_order", schema = "DeVoedselbank")
 public class FoodOrder {
     private int id;
-    private User userid;
+    private User user;
     private Date date;
     private byte toLate;
 
@@ -46,12 +46,12 @@ public class FoodOrder {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "userid")
-    public User getUserid() {
-        return userid;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserid(User userid) {
-        this.userid = userid;
+    public void setUser(User userid) {
+        this.user = userid;
     }
 
     //endregion
@@ -92,14 +92,14 @@ public class FoodOrder {
         if (o == null || getClass() != o.getClass()) return false;
         FoodOrder that = (FoodOrder) o;
         return id == that.id &&
-                userid == that.userid &&
+                user == that.user &&
                 toLate == that.toLate &&
                 Objects.equals(date, that.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userid, date, toLate);
+        return Objects.hash(id, user, date, toLate);
     }
 
     //endregion

@@ -28,7 +28,7 @@ public class FoodOrderController {
     public void addNewFoodOrder (@RequestParam User user, Meal meal, Date date, byte toLate){
 
         FoodOrder newFoodOrder = new FoodOrder();
-        newFoodOrder.setUserid(user);
+        newFoodOrder.setUser(user);
         newFoodOrder.setMeal(meal);
         newFoodOrder.setDate(date);
         newFoodOrder.setToLate(toLate);

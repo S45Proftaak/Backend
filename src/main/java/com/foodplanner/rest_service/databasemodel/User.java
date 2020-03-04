@@ -68,7 +68,7 @@ public class User {
         return Objects.hash(id, name, email);
     }
 
-    @OneToMany(mappedBy = "userid")
+    @OneToMany(mappedBy = "user")
     private Collection<FoodOrder> foodOrders;
 
     public Collection<FoodOrder> getFoodOrders() {
