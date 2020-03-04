@@ -1,4 +1,7 @@
 package com.foodplanner.rest_service.repositories;
 
-public interface MenuRepository {
+import com.foodplanner.rest_service.databasemodel.Menu;
+import org.springframework.data.repository.CrudRepository;
+
+public interface MenuRepository extends CrudRepository<Menu, Integer> {
 }
