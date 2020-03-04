@@ -8,7 +8,7 @@ import java.util.Objects;
 @Table(name = "food_order", schema = "DeVoedselbank")
 public class FoodOrder {
     private int id;
-    private int userid;
+    private User userid;
     private Date date;
     private byte toLate;
 
@@ -22,13 +22,25 @@ public class FoodOrder {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "userid")
-    public int getUserid() {
+    @OneToOne(optional = false)
+    @JoinColumn(name = "meal", referencedColumnName = "id")
+    private Meal meal;
+
+    public Meal getMeal() {
+        return meal;
+    }
+
+    public void setMeal(Meal meal) {
+        this.meal = meal;
+    }
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "userid")
+    public User getUserid() {
         return userid;
     }
 
-    public void setUserid(int userid) {
+    public void setUserid(User userid) {
         this.userid = userid;
     }
 

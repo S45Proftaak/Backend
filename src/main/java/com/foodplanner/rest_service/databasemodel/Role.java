@@ -1,6 +1,7 @@
 package com.foodplanner.rest_service.databasemodel;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
@@ -41,5 +42,16 @@ public class Role {
     @Override
     public int hashCode() {
         return Objects.hash(id, name);
+    }
+
+    private Collection<User> users;
+
+    @OneToMany(mappedBy = "role")
+    public Collection<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Collection<User> user) {
+        this.users = user;
     }
 }

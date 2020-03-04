@@ -54,4 +54,70 @@ public class Meal {
     public int hashCode() {
         return Objects.hash(id, name, price);
     }
+
+    private FoodOrder foodOrder;
+
+    @OneToOne(mappedBy = "meal", optional = false)
+    public FoodOrder getFoodOrder() {
+        return foodOrder;
+    }
+
+    public void setFoodOrder(FoodOrder foodOrder) {
+        this.foodOrder = foodOrder;
+    }
+
+    private Menu menuVrijdag;
+
+    @OneToOne(mappedBy = "vrijdag", optional = false)
+    public Menu getMenuVrijdag() {
+        return menuVrijdag;
+    }
+
+    public void setMenuVrijdag(Menu menu) {
+        this.menuVrijdag = menu;
+    }
+
+    private Menu menuDonderdag;
+
+    @OneToOne(mappedBy = "donderdag", optional = false)
+    public Menu getMenuDonderdag() {
+        return menuDonderdag;
+    }
+
+    public void setMenuDonderdag(Menu menuDonderdag) {
+        this.menuDonderdag = menuDonderdag;
+    }
+
+    private Menu menuWoensdag;
+
+    @OneToOne(mappedBy = "woensdag", optional = false)
+    public Menu getMenuWoensdag() {
+        return menuWoensdag;
+    }
+
+    public void setMenuWoensdag(Menu menuWoensdag) {
+        this.menuWoensdag = menuWoensdag;
+    }
+
+    private Menu menuDinsdag;
+
+    @OneToOne(mappedBy = "dinsdag", optional = false)
+    public Menu getMenuDinsdag() {
+        return menuDinsdag;
+    }
+
+    public void setMenuDinsdag(Menu menuDinsdag) {
+        this.menuDinsdag = menuDinsdag;
+    }
+
+    private Menu menuMaandag;
+
+    @OneToOne(mappedBy = "maandag", optional = false)
+    public Menu getMenuMaandag() {
+        return menuMaandag;
+    }
+
+    public void setMenuMaandag(Menu menuMaandag) {
+        this.menuMaandag = menuMaandag;
+    }
 }

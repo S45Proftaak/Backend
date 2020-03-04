@@ -1,6 +1,7 @@
 package com.foodplanner.rest_service.databasemodel;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
@@ -30,6 +31,18 @@ public class User {
         this.name = name;
     }
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "role")
+    private Role role;
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     @Basic
     @Column(name = "email")
     public String getEmail() {
@@ -53,5 +66,16 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, email);
+    }
+
+    @OneToMany(mappedBy = "userid")
+    private Collection<FoodOrder> foodOrders;
+
+    public Collection<FoodOrder> getFoodOrders() {
+        return foodOrders;
+    }
+
+    public void setFoodOrders(Collection<FoodOrder> foodOrder) {
+        this.foodOrders = foodOrder;
     }
 }
