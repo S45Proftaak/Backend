@@ -57,7 +57,7 @@ public class Meal {
 
     private FoodOrder foodOrder;
 
-    @OneToOne(mappedBy = "meal", optional = false)
+    @OneToOne(mappedBy = "meal")
     public FoodOrder getFoodOrder() {
         return foodOrder;
     }
@@ -68,7 +68,7 @@ public class Meal {
 
     private Menu menuVrijdag;
 
-    @OneToOne(mappedBy = "vrijdag", optional = false)
+    @OneToOne(mappedBy = "vrijdag")
     public Menu getMenuVrijdag() {
         return menuVrijdag;
     }
@@ -79,7 +79,7 @@ public class Meal {
 
     private Menu menuDonderdag;
 
-    @OneToOne(mappedBy = "donderdag", optional = false)
+    @OneToOne(mappedBy = "donderdag")
     public Menu getMenuDonderdag() {
         return menuDonderdag;
     }
@@ -90,7 +90,7 @@ public class Meal {
 
     private Menu menuWoensdag;
 
-    @OneToOne(mappedBy = "woensdag", optional = false)
+    @OneToOne(mappedBy = "woensdag")
     public Menu getMenuWoensdag() {
         return menuWoensdag;
     }
@@ -101,7 +101,7 @@ public class Meal {
 
     private Menu menuDinsdag;
 
-    @OneToOne(mappedBy = "dinsdag", optional = false)
+    @OneToOne(mappedBy = "dinsdag")
     public Menu getMenuDinsdag() {
         return menuDinsdag;
     }
@@ -112,7 +112,7 @@ public class Meal {
 
     private Menu menuMaandag;
 
-    @OneToOne(mappedBy = "maandag", optional = false)
+    @OneToOne(mappedBy = "maandag")
     public Menu getMenuMaandag() {
         return menuMaandag;
     }
