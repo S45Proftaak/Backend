@@ -17,9 +17,11 @@ public class Menu {
         this.id = id;
     }
 
+
+    private Meal maandag;
+
     @OneToOne(optional = false)
     @JoinColumn(name = "maandag", referencedColumnName = "id")
-    private Meal maandag;
 
     public Meal getMaandag() {
         return maandag;
@@ -29,9 +31,11 @@ public class Menu {
         this.maandag = maandag;
     }
 
+
+    private Meal dinsdag;
+
     @OneToOne(optional = false)
     @JoinColumn(name = "dinsdag", referencedColumnName = "id")
-    private Meal dinsdag;
 
     public Meal getDinsdag() {
         return maandag;
@@ -41,9 +45,11 @@ public class Menu {
         this.maandag = maandag;
     }
 
+
+    private Meal woensdag;
+
     @OneToOne(optional = false)
     @JoinColumn(name = "woensdag", referencedColumnName = "id")
-    private Meal woensdag;
 
     public Meal getWoensdag() {
         return maandag;
@@ -53,9 +59,11 @@ public class Menu {
         this.maandag = maandag;
     }
 
+
+    private Meal donderdag;
+
     @OneToOne(optional = false)
     @JoinColumn(name = "donderdag", referencedColumnName = "id")
-    private Meal donderdag;
 
     public Meal getDonderdag() {
         return maandag;
@@ -65,9 +73,11 @@ public class Menu {
         this.maandag = maandag;
     }
 
+
+    private Meal vrijdag;
+
     @OneToOne(optional = false)
     @JoinColumn(name = "vrijdag", referencedColumnName = "id")
-    private Meal vrijdag;
 
     public Meal getVrijdag() {
         return maandag;

@@ -26,22 +26,6 @@ public class FoodOrder {
 
     //endregion
 
-    //region meal one to one
-
-    @OneToOne(optional = false)
-    @JoinColumn(name = "meal", referencedColumnName = "id")
-    private Meal meal;
-
-    public Meal getMeal() {
-        return meal;
-    }
-
-    public void setMeal(Meal meal) {
-        this.meal = meal;
-    }
-
-    //endregion
-
     //region user many to one
 
     @ManyToOne(optional = false)
@@ -52,6 +36,24 @@ public class FoodOrder {
 
     public void setUser(User userid) {
         this.user = userid;
+    }
+
+    //endregion
+
+    //region meal one to one
+
+
+    private Meal meal;
+
+    @OneToOne(optional = false)
+    @JoinColumn(name = "meal", referencedColumnName = "id")
+
+    public Meal getMeal() {
+        return meal;
+    }
+
+    public void setMeal(Meal meal) {
+        this.meal = meal;
     }
 
     //endregion

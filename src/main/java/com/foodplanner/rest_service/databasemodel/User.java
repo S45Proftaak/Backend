@@ -2,7 +2,9 @@ package com.foodplanner.rest_service.databasemodel;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "user", schema = "DeVoedselbank")
@@ -31,18 +33,6 @@ public class User {
         this.name = name;
     }
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "role")
-    private Role role;
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
     @Basic
     @Column(name = "email")
     public String getEmail() {
@@ -51,6 +41,19 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    private Role role;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "role")
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     @Override
@@ -68,14 +71,16 @@ public class User {
         return Objects.hash(id, name, email);
     }
 
-    @OneToMany(mappedBy = "user")
-    private Collection<FoodOrder> foodOrders;
 
-    public Collection<FoodOrder> getFoodOrders() {
+    private List<FoodOrder> foodOrders;
+
+    @OneToMany(mappedBy = "user")
+
+    public List<FoodOrder> getFoodOrders() {
         return foodOrders;
     }
 
-    public void setFoodOrders(Collection<FoodOrder> foodOrder) {
+    public void setFoodOrders(List<FoodOrder> foodOrder) {
         this.foodOrders = foodOrder;
     }
 }
