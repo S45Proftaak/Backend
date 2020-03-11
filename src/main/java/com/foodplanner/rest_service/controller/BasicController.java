@@ -1,6 +1,8 @@
 package com.foodplanner.rest_service.controller;
 
 
+import com.foodplanner.rest_service.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,9 +10,12 @@ import org.springframework.web.bind.annotation.*;
 // Plaats boven elke class die functies bevat een @Controller tag.
 // testController is de path naar deze class dus als je de url opzoekt doe je localhost:8020/testController/....
 @RestController("testController")
+@CrossOrigin
 public class BasicController {
 
 
+    @Autowired
+    private UserRepository repo;
     /*
         Dit is een simpele get request.
         De GetMapping is zodat spring weet dat dit een get request is en de value is het pad naar deze functie.
@@ -26,5 +31,4 @@ public class BasicController {
     public String getid(@RequestParam String id){
         return id;
     }
-
 }
