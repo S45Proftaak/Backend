@@ -1,6 +1,7 @@
 package com.foodplanner.rest_service.databasemodel;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -9,6 +10,7 @@ public class Meal {
     private int id;
     private String name;
     private double price;
+    private List<Menu> menu;
 
     @Id
     @Column(name = "id")
@@ -66,58 +68,10 @@ public class Meal {
         this.foodOrder = foodOrder;
     }
 
-    private Menu menuVrijdag;
+    @OneToMany(mappedBy = "meal")
+    public List<Menu> getMenu() { return menu; }
 
-    @OneToOne(mappedBy = "vrijdag")
-    public Menu getMenuVrijdag() {
-        return menuVrijdag;
-    }
-
-    public void setMenuVrijdag(Menu menu) {
-        this.menuVrijdag = menu;
-    }
-
-    private Menu menuDonderdag;
-
-    @OneToOne(mappedBy = "donderdag")
-    public Menu getMenuDonderdag() {
-        return menuDonderdag;
-    }
-
-    public void setMenuDonderdag(Menu menuDonderdag) {
-        this.menuDonderdag = menuDonderdag;
-    }
-
-    private Menu menuWoensdag;
-
-    @OneToOne(mappedBy = "woensdag")
-    public Menu getMenuWoensdag() {
-        return menuWoensdag;
-    }
-
-    public void setMenuWoensdag(Menu menuWoensdag) {
-        this.menuWoensdag = menuWoensdag;
-    }
-
-    private Menu menuDinsdag;
-
-    @OneToOne(mappedBy = "dinsdag")
-    public Menu getMenuDinsdag() {
-        return menuDinsdag;
-    }
-
-    public void setMenuDinsdag(Menu menuDinsdag) {
-        this.menuDinsdag = menuDinsdag;
-    }
-
-    private Menu menuMaandag;
-
-    @OneToOne(mappedBy = "maandag")
-    public Menu getMenuMaandag() {
-        return menuMaandag;
-    }
-
-    public void setMenuMaandag(Menu menuMaandag) {
-        this.menuMaandag = menuMaandag;
+    public void setMenu(List<Menu> menu) {
+        this.menu = menu;
     }
 }
