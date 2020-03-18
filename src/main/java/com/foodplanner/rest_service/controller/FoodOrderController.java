@@ -1,7 +1,6 @@
 package com.foodplanner.rest_service.controller;
 
 import com.foodplanner.rest_service.databasemodel.FoodOrder;
-import com.foodplanner.rest_service.databasemodel.Meal;
 import com.foodplanner.rest_service.databasemodel.User;
 import com.foodplanner.rest_service.repositories.FoodOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +24,10 @@ public class FoodOrderController {
 
     @GetMapping(value = "addNewFoodOrder")
     @ResponseBody
-    public void addNewFoodOrder (@RequestParam User user, Meal meal, Date date, byte toLate){
+    public void addNewFoodOrder (@RequestParam User user, Date date, byte toLate){
 
         FoodOrder newFoodOrder = new FoodOrder();
         newFoodOrder.setUser(user);
-        newFoodOrder.setMeal(meal);
         newFoodOrder.setDate(date);
         newFoodOrder.setToLate(toLate);
         repo.save(newFoodOrder);

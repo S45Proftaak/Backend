@@ -40,24 +40,6 @@ public class FoodOrder {
 
     //endregion
 
-    //region meal one to one
-
-
-    private Meal meal;
-
-    @OneToOne(optional = false)
-    @JoinColumn(name = "meal", referencedColumnName = "id")
-
-    public Meal getMeal() {
-        return meal;
-    }
-
-    public void setMeal(Meal meal) {
-        this.meal = meal;
-    }
-
-    //endregion
-
     //region date
 
     @Basic
