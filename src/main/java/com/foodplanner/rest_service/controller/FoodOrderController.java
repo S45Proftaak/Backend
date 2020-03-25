@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController("foodOrderController")
@@ -17,7 +19,7 @@ import java.sql.Date;
 public class FoodOrderController {
 
     @Autowired
-    private FoodOrderRepository repo;
+    private FoodOrderRepository foodOrderRepository;
 
     @Autowired
     private JwtTokenProvider tokenProvider;
@@ -25,10 +27,21 @@ public class FoodOrderController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping(value = "getFoodOrderByID")
+    @GetMapping(value = "getFoodOrdersByID")
     @ResponseBody
-    public FoodOrder getFoodOrderByID (@RequestParam int id){
-        return repo.findById(id).get();
+    public List<FoodOrder> getFoodOrdersByID(HttpServletRequest req){
+        String token = tokenProvider.resolveToken(req);
+
+        User user = userRepository.findById(tokenProvider.getUserIdFromToken(token)).get();
+        List<FoodOrder> allOrders = (List<FoodOrder>) foodOrderRepository.findAll();
+        ArrayList<FoodOrder> userOrders = new ArrayList<>();
+        for(FoodOrder order : allOrders){
+            if(order.getUser() == user){
+                userOrders.add(order);
+            }
+        }
+
+        return userOrders;
     }
 
     @PostMapping(value = "addNewFoodOrder")
@@ -42,7 +55,7 @@ public class FoodOrderController {
         newOrder.setUser(user);
         Date date = java.sql.Date.valueOf(java.time.LocalDate.now());
         newOrder.setDate(date);
-        repo.save(newOrder);
+        foodOrderRepository.save(newOrder);
 
     }
 }
