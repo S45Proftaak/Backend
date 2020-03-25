@@ -22,14 +22,10 @@ public class FoodOrderController {
         return repo.findById(id).get();
     }
 
-    @GetMapping(value = "addNewFoodOrder")
+    @PostMapping(value = "addNewFoodOrder")
     @ResponseBody
-    public void addNewFoodOrder (@RequestParam User user, Date date, byte toLate){
+    public void addNewFoodOrder (){
 
-        FoodOrder newFoodOrder = new FoodOrder();
-        newFoodOrder.setUser(user);
-        newFoodOrder.setDate(date);
-        newFoodOrder.setToLate(toLate);
-        repo.save(newFoodOrder);
+
     }
 }
