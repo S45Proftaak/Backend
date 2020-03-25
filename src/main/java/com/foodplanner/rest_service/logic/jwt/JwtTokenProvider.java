@@ -39,8 +39,8 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String getUserIdFromToken(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getId();
+    public int getUserIdFromToken(String token) {
+        return Integer.parseInt(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getId());
     }
 
     public String getUsernameFromToken(String token) {
