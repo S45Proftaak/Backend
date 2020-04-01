@@ -25,7 +25,7 @@ public class FoodOrderController {
 
     @GetMapping(value = "addNewFoodOrder")
     @ResponseBody
-    public void addNewFoodOrder (@RequestParam User user, Meal meal, Date date, byte toLate){
+    public void addNewFoodOrder (@RequestParam User user, Meal meal, Date date, byte toLate) {
 
         FoodOrder newFoodOrder = new FoodOrder();
         newFoodOrder.setUser(user);
