@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/ldap")
 @CrossOrigin
@@ -16,13 +18,11 @@ public class LdapController {
     PersonRepository repository;
 
     @GetMapping("/test")
-    public String test()
+    public boolean test()
     {
-        Person p = repository.findOne("jahn");
-        if(p.getPassword().equals("secret"))
-        {
-            return "true";
-        }
-        return "false";
+        List<Person> p = repository.findByEmail("testemail3@gmail.com");
+        System.out.println(p);
+        boolean correct = repository.authenticateByEmail("testemail3@gmail.com", "secret");
+        return correct;
     }
 }

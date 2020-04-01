@@ -2,9 +2,11 @@ package com.foodplanner.rest_service.ldap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.DirContextOperations;
+import org.springframework.ldap.core.DistinguishedName;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.AbstractContextMapper;
 import org.springframework.ldap.core.support.BaseLdapNameAware;
+import org.springframework.ldap.filter.AndFilter;
 import org.springframework.ldap.filter.EqualsFilter;
 import org.springframework.ldap.query.LdapQuery;
 import org.springframework.ldap.support.LdapNameBuilder;
@@ -53,6 +55,21 @@ public class PersonRepository implements BaseLdapNameAware {
                 .where("objectclass").is("person")
                 .and("cn").whitespaceWildcardsLike(name);
         return ldapTemplate.search(q, new PersonContextMapper());
+    }
+
+    public List<Person> findByEmail(String email)
+    {
+        LdapQuery q = query()
+                .where("objectclass").is("person")
+                .and("email").whitespaceWildcardsLike(email);
+        return ldapTemplate.search(q, new PersonContextMapper());
+    }
+
+    public Boolean authenticateByEmail(String email, String password)
+    {
+        AndFilter filter = new AndFilter();
+        filter.and(new EqualsFilter("objectclass", "person")).and(new EqualsFilter("email", email));
+        return ldapTemplate.authenticate(DistinguishedName.EMPTY_PATH, filter.toString(), password);
     }
 
     public void update(Person p) {

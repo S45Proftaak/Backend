@@ -25,6 +25,7 @@ cn: John Doe
 sn: John
 uid: john
 password: secret
+email: testemail@gmail.com
 
 dn: uid=jihn,ou=people,dc=memorynotfound,dc=com
 objectclass: top
@@ -35,6 +36,7 @@ cn: Jihn Die
 sn: Jihn
 uid: jihn
 password: secret
+email: testemail2@gmail.com
 
 dn: uid=jahn,ou=people,dc=memorynotfound,dc=com
 objectclass: top
@@ -44,7 +46,8 @@ objectclass: inetOrgPerson
 cn: Jahn Dae
 sn: Jahn
 uid: jahn
-password: secret
+userpassword: secret
+email: testemail3@gmail.com
 
 # Create Groups
 dn: cn=developers,ou=groups,dc=memorynotfound,dc=com

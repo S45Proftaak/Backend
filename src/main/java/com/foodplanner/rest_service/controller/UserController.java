@@ -1,13 +1,16 @@
 package com.foodplanner.rest_service.controller;
 
-import com.foodplanner.rest_service.databasemodel.Role;
 import com.foodplanner.rest_service.databasemodel.User;
+import com.foodplanner.rest_service.ldap.Person;
+import com.foodplanner.rest_service.ldap.PersonRepository;
 import com.foodplanner.rest_service.logic.jwt.JwtTokenProvider;
 import com.foodplanner.rest_service.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("/auth")
 public class UserController {
@@ -18,6 +21,9 @@ public class UserController {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
+    @Autowired
+    private PersonRepository ldapRepository;
+
     @GetMapping(value = "getUserByID")
     @ResponseBody
     public User getUser(@RequestParam int id){
@@ -27,19 +33,23 @@ public class UserController {
     @GetMapping(value = "/login")
     public ResponseEntity<?> loginUser(@RequestParam(value = "email")String email, @RequestParam(value = "password")String password){
 
-        // Check user in LDAP Server first
-
-        for(User u : userRepository.findAll()){
-            if(u.getEmail().equals(email)){
-                jwtTokenProvider.createToken(u.getId(), u.getName(), u.getRole().getName());
-                return new ResponseEntity<>(HttpStatus.OK); // return with token
-            }else{
-               User user = new User();
-               user.setEmail(email);
-               user.setName("LDAP NAME");
-               // Set user Role
-                jwtTokenProvider.createToken(user.getId(), user.getName(), user.getRole().getName());
-                return new ResponseEntity<>(HttpStatus.OK); // return with token
+        // Check email/password combination
+        // If True do shit
+        if(ldapRepository.authenticateByEmail(email, password)) {
+            List<Person> ps = ldapRepository.findByEmail(email);
+            Person p = ps.get(0);
+            for (User u : userRepository.findAll()) {
+                if (u.getEmail().equals(email)) {
+                    jwtTokenProvider.createToken(u.getId(), u.getName(), u.getRole().getName());
+                    return new ResponseEntity<>(HttpStatus.OK); // return with token
+                } else {
+                    User user = new User();
+                    user.setEmail(email);
+                    user.setName(p.getFullName());
+                    // Set user Role
+                    jwtTokenProvider.createToken(user.getId(), user.getName(), user.getRole().getName());
+                    return new ResponseEntity<>(HttpStatus.OK); // return with token
+                }
             }
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
