@@ -1,13 +1,19 @@
 package com.foodplanner.rest_service.controller;
 
 import com.foodplanner.rest_service.databasemodel.FoodOrder;
-import com.foodplanner.rest_service.databasemodel.Meal;
 import com.foodplanner.rest_service.databasemodel.User;
+import com.foodplanner.rest_service.logic.jwt.JwtTokenProvider;
 import com.foodplanner.rest_service.repositories.FoodOrderRepository;
+import com.foodplanner.rest_service.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController("foodOrderController")
@@ -15,23 +21,33 @@ import java.sql.Date;
 public class FoodOrderController {
 
     @Autowired
-    private FoodOrderRepository repo;
+    private FoodOrderRepository foodOrderRepository;
 
-    @GetMapping(value = "getFoodOrderByID")
+    @Autowired
+    private JwtTokenProvider tokenProvider;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @GetMapping(value = "getFoodOrdersByUserID")
     @ResponseBody
-    public FoodOrder getFoodOrderByID (@RequestParam int id){
-        return repo.findById(id).get();
+    public List<FoodOrder> getFoodOrdersByUserID(HttpServletRequest req){
+        String token = tokenProvider.resolveToken(req);
+
+        User user = userRepository.findById(tokenProvider.getUserIdFromToken(token)).get();
+        return foodOrderRepository.findAllByUser(user);
     }
 
-    @GetMapping(value = "addNewFoodOrder")
+    @PostMapping(value = "addNewFoodOrder")
     @ResponseBody
-    public void addNewFoodOrder (@RequestParam User user, Meal meal, Date date, byte toLate) {
+    public void addNewFoodOrder (HttpServletRequest req){
 
-        FoodOrder newFoodOrder = new FoodOrder();
-        newFoodOrder.setUser(user);
-        newFoodOrder.setMeal(meal);
-        newFoodOrder.setDate(date);
-        newFoodOrder.setToLate(toLate);
-        repo.save(newFoodOrder);
+        String token = tokenProvider.resolveToken(req);
+
+        User user = userRepository.findById(tokenProvider.getUserIdFromToken(token)).get();
+        FoodOrder newOrder = new FoodOrder();
+        newOrder.setUser(user);
+        newOrder.setDate(java.sql.Date.valueOf(java.time.LocalDate.now()));
+        foodOrderRepository.save(newOrder);
     }
 }
