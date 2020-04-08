@@ -1,9 +1,11 @@
 package com.foodplanner.rest_service.controller;
 
 import com.foodplanner.rest_service.databasemodel.User;
+import com.foodplanner.rest_service.dtos.LoginDTO;
 import com.foodplanner.rest_service.ldap.Person;
 import com.foodplanner.rest_service.ldap.PersonRepository;
 import com.foodplanner.rest_service.logic.jwt.JwtTokenProvider;
+import com.foodplanner.rest_service.repositories.RoleRepository;
 import com.foodplanner.rest_service.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,9 @@ public class UserController {
     @Autowired
     private PersonRepository ldapRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
     @GetMapping(value = "getUserByID")
     @ResponseBody
     public User getUser(@RequestParam int id){
@@ -33,21 +38,22 @@ public class UserController {
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<?> loginUser(@RequestParam(value = "email")String email, @RequestParam(value = "password")String password){
+    public ResponseEntity<?> loginUser(@RequestBody LoginDTO dto) {
 
         // Check email/password combination
         // If True do shit
-        if(ldapRepository.authenticateByEmail(email, password)) {
-            List<Person> ps = ldapRepository.findByEmail(email);
+        if(ldapRepository.authenticateByEmail(dto.getEmail(), dto.getPassword())) {
+            List<Person> ps = ldapRepository.findByEmail(dto.getEmail());
             Person p = ps.get(0);
-            User u = userRepository.findByEmail(email);
+            User u = userRepository.findByEmail(dto.getEmail());
                 if (u != null) {
                     jwtTokenProvider.createToken(u.getId(), u.getName(), u.getRole().getName());
                     return new ResponseEntity<>(HttpStatus.OK); // return with token
                 } else {
                     User user = new User();
-                    user.setEmail(email);
+                    user.setEmail(dto.getEmail());
                     user.setName(p.getFullName());
+                    user.setRole(roleRepository.findByName("Employee"));
                     userRepository.save(user);
                     jwtTokenProvider.createToken(user.getId(), user.getName(), user.getRole().getName());
                     return new ResponseEntity<>(HttpStatus.OK); // return with token
