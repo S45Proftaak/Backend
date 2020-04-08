@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RequestMapping("/auth")
+@RestController
+@CrossOrigin
 public class UserController {
 
     @Autowired
@@ -30,7 +32,7 @@ public class UserController {
         return userRepository.findById(id).get();
     }
 
-    @GetMapping(value = "/login")
+    @PostMapping(value = "/login")
     public ResponseEntity<?> loginUser(@RequestParam(value = "email")String email, @RequestParam(value = "password")String password){
 
         // Check email/password combination
@@ -38,19 +40,18 @@ public class UserController {
         if(ldapRepository.authenticateByEmail(email, password)) {
             List<Person> ps = ldapRepository.findByEmail(email);
             Person p = ps.get(0);
-            for (User u : userRepository.findAll()) {
-                if (u.getEmail().equals(email)) {
+            User u = userRepository.findByEmail(email);
+                if (u != null) {
                     jwtTokenProvider.createToken(u.getId(), u.getName(), u.getRole().getName());
                     return new ResponseEntity<>(HttpStatus.OK); // return with token
                 } else {
                     User user = new User();
                     user.setEmail(email);
                     user.setName(p.getFullName());
-                    // Set user Role
+                    userRepository.save(user);
                     jwtTokenProvider.createToken(user.getId(), user.getName(), user.getRole().getName());
                     return new ResponseEntity<>(HttpStatus.OK); // return with token
                 }
-            }
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
