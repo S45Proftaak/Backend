@@ -24,7 +24,7 @@ objectclass: inetOrgPerson
 cn: John Doe
 sn: John
 uid: john
-password: secret
+userpassword: secret
 email: testemail@gmail.com
 
 dn: uid=jihn,ou=people,dc=memorynotfound,dc=com
@@ -35,7 +35,7 @@ objectclass: inetOrgPerson
 cn: Jihn Die
 sn: Jihn
 uid: jihn
-password: secret
+userpassword: secret
 email: testemail2@gmail.com
 
 dn: uid=jahn,ou=people,dc=memorynotfound,dc=com
