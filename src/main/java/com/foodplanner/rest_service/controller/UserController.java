@@ -12,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/auth")
 @RestController
@@ -40,21 +42,22 @@ public class UserController {
     @PostMapping(value = "/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginDTO dto) {
 
-        // Check email/password combination
-        // If True do shit
+        Map map = new HashMap<>();
         if(ldapRepository.authenticateByEmail(dto.getEmail(), dto.getPassword())) {
             List<Person> ps = ldapRepository.findByEmail(dto.getEmail());
             Person p = ps.get(0);
             User u = userRepository.findByEmail(dto.getEmail());
                 if (u != null) {
-                    return new ResponseEntity<>(jwtTokenProvider.createToken(u.getId(), u.getName(), u.getRole().getName()), HttpStatus.OK);
+                    map.put("token", jwtTokenProvider.createToken(u.getId(), u.getName(), u.getRole().getName()));
+                    return new ResponseEntity<>(map, HttpStatus.OK);
                 } else {
                     User user = new User();
                     user.setEmail(dto.getEmail());
                     user.setName(p.getFullName());
                     user.setRole(roleRepository.findByName("Employee"));
                     userRepository.save(user);
-                    return new ResponseEntity<>(jwtTokenProvider.createToken(user.getId(), user.getName(), user.getRole().getName()), HttpStatus.OK); // return with token
+                    map.put("token", jwtTokenProvider.createToken(u.getId(), u.getName(), u.getRole().getName()));
+                    return new ResponseEntity<>(map, HttpStatus.OK); // return with token
                 }
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
