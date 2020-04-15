@@ -3,6 +3,7 @@ package com.foodplanner.rest_service.controller;
 import com.foodplanner.rest_service.databasemodel.FoodOrder;
 import com.foodplanner.rest_service.databasemodel.User;
 import com.foodplanner.rest_service.dtos.WeekDTO;
+import com.foodplanner.rest_service.logic.foodorder.DateChecker;
 import com.foodplanner.rest_service.logic.jwt.JwtTokenProvider;
 import com.foodplanner.rest_service.repositories.FoodOrderRepository;
 import com.foodplanner.rest_service.repositories.UserRepository;
@@ -17,7 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@RestController("foodOrderController")
+@RestController()
+@RequestMapping(value = "foodOrderController")
 @CrossOrigin
 public class FoodOrderController {
 
@@ -43,17 +45,10 @@ public class FoodOrderController {
     @ResponseBody
     public List<Date> getFoodOrdersPerWeek(HttpServletRequest req, @RequestBody WeekDTO weekDTO){
         String token = tokenProvider.resolveToken(req);
+        DateChecker checker = new DateChecker();
 
-        List<Date> foundDates = new ArrayList<>();
-
-        for (FoodOrder order : foodOrderRepository.findAllByUser(userRepository.findById(tokenProvider.getUserIdFromToken(token)).get())){
-            for (Date date : weekDTO.getDates()){
-                if(date.equals(order.getDate())){
-                    foundDates.add(date);
-                }
-            }
-        }
-        return foundDates;
+        return checker.checkDates(foodOrderRepository.findAllByUser(userRepository.findById(tokenProvider.getUserIdFromToken(token)).get()),
+                weekDTO.getDates());
     }
 
     @PostMapping(value = "addNewFoodOrder")

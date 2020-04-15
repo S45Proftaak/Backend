@@ -56,7 +56,7 @@ public class UserController {
                     user.setName(p.getFullName());
                     user.setRole(roleRepository.findByName("Employee"));
                     userRepository.save(user);
-                    map.put("token", jwtTokenProvider.createToken(u.getId(), u.getName(), u.getRole().getName()));
+                    map.put("token", jwtTokenProvider.createToken(user.getId(), user.getName(), user.getRole().getName()));
                     return new ResponseEntity<>(map, HttpStatus.OK); // return with token
                 }
         }
