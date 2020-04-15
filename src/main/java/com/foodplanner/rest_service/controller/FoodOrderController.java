@@ -19,7 +19,7 @@ import java.util.List;
 
 
 @RestController()
-@RequestMapping(value = "foodOrderController")
+@RequestMapping(value = "foodorder")
 @CrossOrigin
 public class FoodOrderController {
 
@@ -32,7 +32,7 @@ public class FoodOrderController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping(value = "getFoodOrdersByUserID")
+    @GetMapping(value = "/all-orders-by-id")
     @ResponseBody
     public List<FoodOrder> getFoodOrdersByUserID(HttpServletRequest req){
         String token = tokenProvider.resolveToken(req);
@@ -41,7 +41,7 @@ public class FoodOrderController {
         return foodOrderRepository.findAllByUser(user);
     }
 
-    @GetMapping(value = "getOrdersPerWeek")
+    @GetMapping(value = "/all-orders-per-week")
     @ResponseBody
     public List<Date> getFoodOrdersPerWeek(HttpServletRequest req, @RequestBody WeekDTO weekDTO){
         String token = tokenProvider.resolveToken(req);
@@ -51,7 +51,7 @@ public class FoodOrderController {
                 weekDTO.getDates());
     }
 
-    @PostMapping(value = "addNewFoodOrder")
+    @PostMapping(value = "/add-order")
     @ResponseBody
     public void addNewFoodOrder (HttpServletRequest req, @RequestParam(value = "date") Date date){
 
