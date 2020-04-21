@@ -26,6 +26,7 @@ sn: John
 uid: john
 password: secret
 email: testemail@gmail.com
+role: Employee
 
 dn: uid=jihn,ou=people,dc=memorynotfound,dc=com
 objectclass: top
@@ -37,6 +38,7 @@ sn: Jihn
 uid: jihn
 password: secret
 email: testemail2@gmail.com
+role: Admin
 
 dn: uid=jahn,ou=people,dc=memorynotfound,dc=com
 objectclass: top
@@ -48,6 +50,7 @@ sn: Jahn
 uid: jahn
 userpassword: secret
 email: testemail3@gmail.com
+role: Secretary
 
 # Create Groups
 dn: cn=developers,ou=groups,dc=memorynotfound,dc=com

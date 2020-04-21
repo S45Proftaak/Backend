@@ -47,16 +47,14 @@ public class UserController {
             Person p = ps.get(0);
             User u = userRepository.findByEmail(dto.getEmail());
                 if (u != null) {
-                    jwtTokenProvider.createToken(u.getId(), u.getName(), u.getRole().getName());
-                    return new ResponseEntity<>(HttpStatus.OK); // return with token
+                    return new ResponseEntity<>(jwtTokenProvider.createToken(u.getId(), u.getName(), u.getRole().getName()), HttpStatus.OK); // return with token
                 } else {
                     User user = new User();
                     user.setEmail(dto.getEmail());
                     user.setName(p.getFullName());
                     user.setRole(roleRepository.findByName("Employee"));
                     userRepository.save(user);
-                    jwtTokenProvider.createToken(user.getId(), user.getName(), user.getRole().getName());
-                    return new ResponseEntity<>(HttpStatus.OK); // return with token
+                    return new ResponseEntity<>(jwtTokenProvider.createToken(user.getId(), user.getName(), user.getRole().getName()), HttpStatus.OK); // return with token
                 }
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

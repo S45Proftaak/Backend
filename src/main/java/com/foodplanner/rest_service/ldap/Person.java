@@ -13,23 +13,26 @@ public class Person {
     private String lastName;
     private String password;
     private String email;
+    private String role;
 
     public Person() {
     }
 
-    public Person(String fullName, String lastName, String password, String email) {
+    public Person(String fullName, String lastName, String password, String email, String role) {
         this.fullName = fullName;
         this.lastName = lastName;
         this.password = password;
         this.email = email;
+        this.role = role;
     }
 
-    public Person(String uid, String fullName, String lastName, String password, String email) {
+    public Person(String uid, String fullName, String lastName, String password, String role, String email) {
         this.uid = uid;
         this.email = email;
         this.fullName = fullName;
         this.lastName = lastName;
         this.password = password;
+        this.role = role;
     }
 
     public String getUid() {
@@ -72,11 +75,16 @@ public class Person {
         this.email = email;
     }
 
+    public String getRole() { return role; }
+
+    public void setRole(String role) { this.role = role; }
+
     @Override
     public String toString() {
         return "Person{" +
                 "fullName='" + fullName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", role='" + role + '\'' +
                 '}';
     }
 }
