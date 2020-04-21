@@ -7,6 +7,8 @@ import com.foodplanner.rest_service.dtos.LoginReturnDTO;
 import com.foodplanner.rest_service.ldap.Person;
 import com.foodplanner.rest_service.ldap.PersonRepository;
 import com.foodplanner.rest_service.logic.jwt.JwtTokenProvider;
+import com.foodplanner.rest_service.mappings.AuthMapping;
+import com.foodplanner.rest_service.mappings.OrderMapping;
 import com.foodplanner.rest_service.repositories.RoleRepository;
 import com.foodplanner.rest_service.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,16 +39,12 @@ public class UserController {
 
     User user = new User();
 
-    @GetMapping(value = "getUserByID")
-    @ResponseBody
-    public User getUser(@RequestParam int id){
-        return userRepository.findById(id).get();
-    }
-
-    @PostMapping(value = "/login")
+    @PostMapping(value = AuthMapping.LOGIN)
     public ResponseEntity<?> loginUser(@RequestBody LoginDTO dto) {
         LoginReturnDTO returnDTO = new LoginReturnDTO();
-        returnDTO.addLink(new LinkDTO("test"));
+        returnDTO.addLink(new LinkDTO(OrderMapping.ALL_ORDERS));
+        returnDTO.addLink(new LinkDTO(OrderMapping.ORDERS_PER_WEEK));
+        returnDTO.addLink(new LinkDTO(OrderMapping.ADD_ORDER));
 
         if(ldapRepository.authenticateByEmail(dto.getEmail(), dto.getPassword())) {
             List<Person> ps = ldapRepository.findByEmail(dto.getEmail());

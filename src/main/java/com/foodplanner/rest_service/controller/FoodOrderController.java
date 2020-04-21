@@ -5,6 +5,7 @@ import com.foodplanner.rest_service.databasemodel.User;
 import com.foodplanner.rest_service.dtos.WeekDTO;
 import com.foodplanner.rest_service.logic.foodorder.DateChecker;
 import com.foodplanner.rest_service.logic.jwt.JwtTokenProvider;
+import com.foodplanner.rest_service.mappings.OrderMapping;
 import com.foodplanner.rest_service.repositories.FoodOrderRepository;
 import com.foodplanner.rest_service.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class FoodOrderController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping(value = "/all-orders-by-id")
+    @GetMapping(value = OrderMapping.ALL_ORDERS)
     @ResponseBody
     public List<FoodOrder> getFoodOrdersByUserID(HttpServletRequest req){
         String token = tokenProvider.resolveToken(req);
@@ -41,7 +42,7 @@ public class FoodOrderController {
         return foodOrderRepository.findAllByUser(user);
     }
 
-    @GetMapping(value = "/all-orders-per-week")
+    @GetMapping(value = OrderMapping.ORDERS_PER_WEEK)
     @ResponseBody
     public List<Date> getFoodOrdersPerWeek(HttpServletRequest req, @RequestBody WeekDTO weekDTO){
         String token = tokenProvider.resolveToken(req);
@@ -51,7 +52,7 @@ public class FoodOrderController {
                 weekDTO.getDates());
     }
 
-    @PostMapping(value = "/add-order")
+    @PostMapping(value = OrderMapping.ADD_ORDER)
     @ResponseBody
     public void addNewFoodOrder (HttpServletRequest req, @RequestParam(value = "date") Date date){
 
