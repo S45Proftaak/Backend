@@ -45,10 +45,10 @@ public class FoodOrderController {
     @GetMapping(value = OrderMapping.ORDERS_PER_WEEK)
     @ResponseBody
     public List<String> getFoodOrdersPerWeek(HttpServletRequest req, @RequestParam List<String> dates){
-       // String token = tokenProvider.resolveToken(req);
+        String token = tokenProvider.resolveToken(req);
         DateChecker checker = new DateChecker();
 
-        return checker.checkDates(foodOrderRepository.findAllByUser(userRepository.findById(2).get()),
+        return checker.checkDates(foodOrderRepository.findAllByUser(userRepository.findById(tokenProvider.getUserIdFromToken(token)).get()),
                 dates);
     }
 
