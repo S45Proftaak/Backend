@@ -44,12 +44,12 @@ public class FoodOrderController {
 
     @GetMapping(value = OrderMapping.ORDERS_PER_WEEK)
     @ResponseBody
-    public List<Date> getFoodOrdersPerWeek(HttpServletRequest req, @RequestBody WeekDTO weekDTO){
+    public List<Date> getFoodOrdersPerWeek(HttpServletRequest req, @RequestParam(value = "weekDates") List<Date> dates){
         String token = tokenProvider.resolveToken(req);
         DateChecker checker = new DateChecker();
 
         return checker.checkDates(foodOrderRepository.findAllByUser(userRepository.findById(tokenProvider.getUserIdFromToken(token)).get()),
-                weekDTO.getDates());
+                dates);
     }
 
     @PostMapping(value = OrderMapping.ADD_ORDER)
