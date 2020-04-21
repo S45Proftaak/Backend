@@ -24,7 +24,7 @@ objectclass: inetOrgPerson
 cn: John Doe
 sn: John
 uid: john
-password: secret
+userpassword: secret
 email: testemail@gmail.com
 role: Employee
 
@@ -36,7 +36,7 @@ objectclass: inetOrgPerson
 cn: Jihn Die
 sn: Jihn
 uid: jihn
-password: secret
+userpassword: secret
 email: testemail2@gmail.com
 role: Admin
 
