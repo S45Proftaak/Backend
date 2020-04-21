@@ -3,8 +3,6 @@ package com.foodplanner.rest_service.logic.foodorder;
 import com.foodplanner.rest_service.databasemodel.FoodOrder;
 
 import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,11 +24,8 @@ public class DateChecker {
     public List<Date> convertedDates(List<String> dates){
         List<Date> convertedDates = new ArrayList<>();
         for(String string : dates){
-            try{
-                convertedDates.add((Date) new SimpleDateFormat("yyyy/dd/MM").parse(string));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+                Date date = Date.valueOf(string);
+                convertedDates.add(date);
         }
         return convertedDates;
     }
