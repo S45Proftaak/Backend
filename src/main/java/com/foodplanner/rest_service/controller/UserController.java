@@ -1,7 +1,9 @@
 package com.foodplanner.rest_service.controller;
 
 import com.foodplanner.rest_service.databasemodel.User;
+import com.foodplanner.rest_service.dtos.LinkDTO;
 import com.foodplanner.rest_service.dtos.LoginDTO;
+import com.foodplanner.rest_service.dtos.LoginReturnDTO;
 import com.foodplanner.rest_service.ldap.Person;
 import com.foodplanner.rest_service.ldap.PersonRepository;
 import com.foodplanner.rest_service.logic.jwt.JwtTokenProvider;
@@ -33,6 +35,8 @@ public class UserController {
     @Autowired
     private RoleRepository roleRepository;
 
+    User user = new User();
+
     @GetMapping(value = "getUserByID")
     @ResponseBody
     public User getUser(@RequestParam int id){
@@ -41,25 +45,29 @@ public class UserController {
 
     @PostMapping(value = "/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginDTO dto) {
+        LoginReturnDTO returnDTO = new LoginReturnDTO();
+        returnDTO.addLink(new LinkDTO("test"));
 
-        Map map = new HashMap<>();
         if(ldapRepository.authenticateByEmail(dto.getEmail(), dto.getPassword())) {
             List<Person> ps = ldapRepository.findByEmail(dto.getEmail());
             Person p = ps.get(0);
-            User u = userRepository.findByEmail(dto.getEmail());
-                if (u != null) {
-                    map.put("token", jwtTokenProvider.createToken(u.getId(), u.getName(), u.getRole().getName()));
-                    return new ResponseEntity<>(map, HttpStatus.OK);
+            User dbUser = userRepository.findByEmail(dto.getEmail());
+                if (dbUser != null) {
+                    returnDTO.setToken(jwtTokenProvider.createToken(dbUser.getId(), dbUser.getName(), dbUser.getRole().getName()));
+                    return new ResponseEntity<>(returnDTO, HttpStatus.OK);
                 } else {
-                    User user = new User();
-                    user.setEmail(dto.getEmail());
-                    user.setName(p.getFullName());
-                    user.setRole(roleRepository.findByName("Employee"));
+                    setNewUser(dto.getEmail(), p.getFullName(), "Employee");
                     userRepository.save(user);
-                    map.put("token", jwtTokenProvider.createToken(user.getId(), user.getName(), user.getRole().getName()));
-                    return new ResponseEntity<>(map, HttpStatus.OK); // return with token
+                   returnDTO.setToken(jwtTokenProvider.createToken(user.getId(), user.getName(), user.getRole().getName()));
+                    return new ResponseEntity<>(returnDTO, HttpStatus.OK); // return with token
                 }
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    public void setNewUser(String email, String name, String role){
+        user.setEmail(email);
+        user.setName(name);
+        user.setRole(roleRepository.findByName(role));
     }
 }
