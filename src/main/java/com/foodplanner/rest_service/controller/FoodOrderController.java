@@ -44,7 +44,7 @@ public class FoodOrderController {
 
     @GetMapping(value = OrderMapping.ORDERS_PER_WEEK)
     @ResponseBody
-    public List<Date> getFoodOrdersPerWeek(HttpServletRequest req, @RequestParam(value = "weekDates") List<Date> dates){
+    public List<Date> getFoodOrdersPerWeek(HttpServletRequest req, @RequestParam List<String> dates){
         String token = tokenProvider.resolveToken(req);
         DateChecker checker = new DateChecker();
 
