@@ -2,7 +2,6 @@ package com.foodplanner.rest_service.logic.foodorder;
 
 import com.foodplanner.rest_service.databasemodel.FoodOrder;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
