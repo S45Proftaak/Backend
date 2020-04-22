@@ -3,6 +3,7 @@ package com.foodplanner.rest_service.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import com.foodplanner.rest_service.databasemodel.FoodOrder;
 import com.foodplanner.rest_service.databasemodel.User;
+import com.foodplanner.rest_service.dtos.NewOrderDTO;
 import com.foodplanner.rest_service.ldap.PersonRepository;
 import com.foodplanner.rest_service.logic.jwt.JwtTokenProvider;
 import com.foodplanner.rest_service.repositories.FoodOrderRepository;
@@ -55,9 +56,12 @@ public class MealEndpoint {
         String str = "2015-03-31";
         Date date = Date.valueOf(str);
 
+        NewOrderDTO dto = new NewOrderDTO();
+        dto.setDate(date);
+
         when(foodOrderRepository.save(any(FoodOrder.class))).thenReturn(new FoodOrder());
 
-        ResponseEntity<Object> responseEntity = foodOrderController.addNewFoodOrder(request, date);
+        ResponseEntity<?> responseEntity = foodOrderController.addNewFoodOrder(request, dto);
 
         assertThat(responseEntity.getStatusCodeValue()).isEqualTo(400);
     }
@@ -77,11 +81,14 @@ public class MealEndpoint {
         String str = "2015-03-31";
         Date date = Date.valueOf(str);
 
+        NewOrderDTO dto = new NewOrderDTO();
+        dto.setDate(date);
+
         when(foodOrderRepository.save(any(FoodOrder.class))).thenReturn(new FoodOrder());
         when(jwtTokenProvider.resolveToken(any(HttpServletRequest.class))).thenReturn(bearerToken);
         when(userRepository.findById(any(Integer.class))).thenReturn(Optional.of(user));
 
-        ResponseEntity<Object> responseEntity = foodOrderController.addNewFoodOrder(request, date);
+        ResponseEntity<?> responseEntity = foodOrderController.addNewFoodOrder(request, dto);
 
         assertThat(responseEntity.getStatusCodeValue()).isEqualTo(200);
     }
