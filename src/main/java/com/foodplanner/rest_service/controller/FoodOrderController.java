@@ -2,7 +2,10 @@ package com.foodplanner.rest_service.controller;
 
 import com.foodplanner.rest_service.databasemodel.FoodOrder;
 import com.foodplanner.rest_service.databasemodel.User;
+import com.foodplanner.rest_service.dtos.WeekDTO;
+import com.foodplanner.rest_service.logic.foodorder.DateChecker;
 import com.foodplanner.rest_service.logic.jwt.JwtTokenProvider;
+import com.foodplanner.rest_service.mappings.OrderMapping;
 import com.foodplanner.rest_service.repositories.FoodOrderRepository;
 import com.foodplanner.rest_service.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@RestController("foodOrderController")
+@RestController()
+@RequestMapping(value = "/foodorder")
 @CrossOrigin
 public class FoodOrderController {
 
@@ -29,7 +33,7 @@ public class FoodOrderController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping(value = "getFoodOrdersByUserID")
+    @GetMapping(value = OrderMapping.ALL_ORDERS)
     @ResponseBody
     public List<FoodOrder> getFoodOrdersByUserID(HttpServletRequest req){
         String token = tokenProvider.resolveToken(req);
@@ -38,16 +42,26 @@ public class FoodOrderController {
         return foodOrderRepository.findAllByUser(user);
     }
 
-    @PostMapping(value = "addNewFoodOrder")
+    @GetMapping(value = OrderMapping.ORDERS_PER_WEEK)
     @ResponseBody
-    public void addNewFoodOrder (HttpServletRequest req){
+    public List<String> getFoodOrdersPerWeek(HttpServletRequest req, @RequestParam List<String> dates){
+        String token = tokenProvider.resolveToken(req);
+        DateChecker checker = new DateChecker();
+
+        return checker.checkDates(foodOrderRepository.findAllByUser(userRepository.findById(tokenProvider.getUserIdFromToken(token)).get()),
+                dates);
+    }
+
+    @PostMapping(value = OrderMapping.ADD_ORDER)
+    @ResponseBody
+    public void addNewFoodOrder (HttpServletRequest req, @RequestParam(value = "date") Date date){
 
         String token = tokenProvider.resolveToken(req);
 
         User user = userRepository.findById(tokenProvider.getUserIdFromToken(token)).get();
         FoodOrder newOrder = new FoodOrder();
         newOrder.setUser(user);
-        newOrder.setDate(java.sql.Date.valueOf(java.time.LocalDate.now()));
+        newOrder.setDate(date);
         foodOrderRepository.save(newOrder);
     }
 }
