@@ -19,19 +19,12 @@ public class Person {
     }
 
     public Person(String fullName, String lastName, String password, String email, String role) {
+        String[] split = fullName.split(" ");
+        this.uid = split[0].toLowerCase();
         this.fullName = fullName;
         this.lastName = lastName;
         this.password = password;
         this.email = email;
-        this.role = role;
-    }
-
-    public Person(String uid, String fullName, String lastName, String password, String role, String email) {
-        this.uid = uid;
-        this.email = email;
-        this.fullName = fullName;
-        this.lastName = lastName;
-        this.password = password;
         this.role = role;
     }
 

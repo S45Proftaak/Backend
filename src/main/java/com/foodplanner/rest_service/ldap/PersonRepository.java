@@ -115,6 +115,8 @@ public class PersonRepository implements BaseLdapNameAware {
             person.setLastName(context.getStringAttribute("sn"));
             person.setUid(context.getStringAttribute("uid"));
             person.setPassword(context.getStringAttribute("password"));
+            person.setEmail(context.getStringAttribute("email"));
+            person.setRole(context.getStringAttribute("role"));
             return person;
         }
     }
