@@ -11,6 +11,7 @@ public class Role {
     private String name;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     public int getId() {
         return id;
