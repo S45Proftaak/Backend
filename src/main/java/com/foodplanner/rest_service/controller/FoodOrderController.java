@@ -78,13 +78,7 @@ public class FoodOrderController {
     }
 
     private boolean resolveToken(HttpServletRequest request) {
-        try {
-            resolvedToken = tokenProvider.resolveToken(request);
-        } catch (Exception e) {
-            Map map = new HashMap();
-            map.put("error", "No token found");
-            return false;
-        }
-        return true;
+        resolvedToken = tokenProvider.resolveToken(request);
+        return resolvedToken != null;
     }
 }
