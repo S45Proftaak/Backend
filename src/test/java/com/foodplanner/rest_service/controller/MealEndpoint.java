@@ -24,7 +24,6 @@ import java.sql.Date;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.Silent.class)
@@ -54,7 +53,7 @@ public class MealEndpoint {
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 
         NewOrderDTO dto = new NewOrderDTO();
-        dto.setDate("2015-03-31");
+        dto.setDate(Date.valueOf("2015-03-31"));
 
         when(foodOrderRepository.save(any(FoodOrder.class))).thenReturn(new FoodOrder());
 
@@ -76,7 +75,7 @@ public class MealEndpoint {
         user.setId(2);
 
         NewOrderDTO dto = new NewOrderDTO();
-        dto.setDate("2015-03-31");
+        dto.setDate(Date.valueOf("2015-03-31"));
 
         when(foodOrderRepository.save(any(FoodOrder.class))).thenReturn(new FoodOrder());
         when(jwtTokenProvider.resolveToken(any(HttpServletRequest.class))).thenReturn(bearerToken);
