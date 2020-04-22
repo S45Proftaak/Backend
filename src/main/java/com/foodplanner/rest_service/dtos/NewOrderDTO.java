@@ -4,13 +4,13 @@ import java.sql.Date;
 
 public class NewOrderDTO {
 
-    public Date date;
+    public String date;
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 }

@@ -44,45 +44,47 @@ public class FoodOrderController {
 
     @GetMapping(value = OrderMapping.ALL_ORDERS)
     @ResponseBody
-    public List<FoodOrder> getFoodOrdersByUserID(HttpServletRequest req) {
-       resolveToken(req);
-
-        User user = userRepository.findById(tokenProvider.getUserIdFromToken(resolvedToken)).get();
-        return foodOrderRepository.findAllByUser(user);
+    public ResponseEntity<?> getFoodOrdersByUserID(HttpServletRequest req) {
+        if(resolveToken(req)){
+            User user = userRepository.findById(tokenProvider.getUserIdFromToken(resolvedToken)).get();
+            return new ResponseEntity<>(foodOrderRepository.findAllByUser(user), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping(value = OrderMapping.ORDERS_PER_WEEK)
     @ResponseBody
     public ResponseEntity<?> getFoodOrdersPerWeek(HttpServletRequest req, @RequestParam List<String> dates) {
-        resolveToken(req);
-
-        DateChecker checker = new DateChecker();
-
-        return new ResponseEntity<>(checker.checkDates(foodOrderRepository.findAllByUser(userRepository.findById(tokenProvider.getUserIdFromToken(resolvedToken)).get()),
-                dates), HttpStatus.OK);
+        if (resolveToken(req)) {
+            DateChecker checker = new DateChecker();
+            return new ResponseEntity<>(checker.checkDates(foodOrderRepository.findAllByUser(userRepository.findById(tokenProvider.getUserIdFromToken(resolvedToken)).get()),
+                    dates), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping(value = OrderMapping.ADD_ORDER)
     @ResponseBody
     public ResponseEntity<?> addNewFoodOrder(HttpServletRequest req, @RequestBody NewOrderDTO newOrderDTO) {
-        resolveToken(req);
-
-        User user = userRepository.findById(tokenProvider.getUserIdFromToken(resolvedToken)).get();
-        FoodOrder newOrder = new FoodOrder();
-        newOrder.setUser(user);
-        newOrder.setDate(newOrderDTO.getDate());
-        foodOrderRepository.save(newOrder);
-        return new ResponseEntity<>(HttpStatus.OK);
+        if (resolveToken(req)) {
+            User user = userRepository.findById(tokenProvider.getUserIdFromToken(resolvedToken)).get();
+            FoodOrder newOrder = new FoodOrder();
+            newOrder.setUser(user);
+            newOrder.setDate(Date.valueOf(newOrderDTO.getDate()));
+            foodOrderRepository.save(newOrder);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    private ResponseEntity<?> resolveToken(HttpServletRequest request) {
+    private boolean resolveToken(HttpServletRequest request) {
         try {
             resolvedToken = tokenProvider.resolveToken(request);
         } catch (Exception e) {
             Map map = new HashMap();
             map.put("error", "No token found");
-            return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
+            return false;
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return true;
     }
 }

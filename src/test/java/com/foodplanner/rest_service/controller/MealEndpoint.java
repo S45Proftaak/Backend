@@ -57,7 +57,7 @@ public class MealEndpoint {
         Date date = Date.valueOf(str);
 
         NewOrderDTO dto = new NewOrderDTO();
-        dto.setDate(date);
+        dto.setDate(str);
 
         when(foodOrderRepository.save(any(FoodOrder.class))).thenReturn(new FoodOrder());
 
@@ -82,7 +82,7 @@ public class MealEndpoint {
         Date date = Date.valueOf(str);
 
         NewOrderDTO dto = new NewOrderDTO();
-        dto.setDate(date);
+        dto.setDate(str);
 
         when(foodOrderRepository.save(any(FoodOrder.class))).thenReturn(new FoodOrder());
         when(jwtTokenProvider.resolveToken(any(HttpServletRequest.class))).thenReturn(bearerToken);
