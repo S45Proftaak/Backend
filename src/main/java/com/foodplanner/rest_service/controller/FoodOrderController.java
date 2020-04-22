@@ -2,6 +2,7 @@ package com.foodplanner.rest_service.controller;
 
 import com.foodplanner.rest_service.databasemodel.FoodOrder;
 import com.foodplanner.rest_service.databasemodel.User;
+import com.foodplanner.rest_service.dtos.NewOrderDTO;
 import com.foodplanner.rest_service.dtos.WeekDTO;
 import com.foodplanner.rest_service.logic.foodorder.DateChecker;
 import com.foodplanner.rest_service.logic.jwt.JwtTokenProvider;
@@ -50,17 +51,17 @@ public class FoodOrderController {
 
     @GetMapping(value = OrderMapping.ORDERS_PER_WEEK)
     @ResponseBody
-    public List<String> getFoodOrdersPerWeek(HttpServletRequest req, @RequestParam List<String> dates){
+    public ResponseEntity<?> getFoodOrdersPerWeek(HttpServletRequest req, @RequestParam List<String> dates){
         String token = tokenProvider.resolveToken(req);
         DateChecker checker = new DateChecker();
 
-        return checker.checkDates(foodOrderRepository.findAllByUser(userRepository.findById(tokenProvider.getUserIdFromToken(token)).get()),
-                dates);
+        return new ResponseEntity<>(checker.checkDates(foodOrderRepository.findAllByUser(userRepository.findById(tokenProvider.getUserIdFromToken(token)).get()),
+                dates), HttpStatus.OK);
     }
 
     @PostMapping(value = OrderMapping.ADD_ORDER)
     @ResponseBody
-    public ResponseEntity<Object> addNewFoodOrder (HttpServletRequest req, @RequestParam(value = "date") Date date){
+    public ResponseEntity<Object> addNewFoodOrder (HttpServletRequest req, @RequestBody NewOrderDTO newOrderDTO){
         String token = null;
         try{
             token = tokenProvider.resolveToken(req);
@@ -74,11 +75,15 @@ public class FoodOrderController {
             User user = userRepository.findById(tokenProvider.getUserIdFromToken(token)).get();
             FoodOrder newOrder = new FoodOrder();
             newOrder.setUser(user);
-            newOrder.setDate(date);
+            newOrder.setDate(newOrderDTO.getDate());
             foodOrderRepository.save(newOrder);
             return new ResponseEntity<Object>(HttpStatus.OK);
         }
 
         return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+    }
+
+    private void resolveToken(HttpServletRequest request){
+
     }
 }
