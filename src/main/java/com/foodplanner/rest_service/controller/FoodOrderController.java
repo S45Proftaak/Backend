@@ -70,7 +70,7 @@ public class FoodOrderController {
             User user = userRepository.findById(tokenProvider.getUserIdFromToken(resolvedToken)).get();
             FoodOrder newOrder = new FoodOrder();
             newOrder.setUser(user);
-            newOrder.setDate(Date.valueOf(newOrderDTO.getDate()));
+            newOrder.setDate(newOrderDTO.getDate());
             foodOrderRepository.save(newOrder);
             return new ResponseEntity<>(HttpStatus.OK);
         }

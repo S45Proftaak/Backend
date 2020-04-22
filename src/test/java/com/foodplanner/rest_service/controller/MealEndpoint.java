@@ -53,11 +53,8 @@ public class MealEndpoint {
         MockHttpServletRequest request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 
-        String str = "2015-03-31";
-        Date date = Date.valueOf(str);
-
         NewOrderDTO dto = new NewOrderDTO();
-        dto.setDate(str);
+        dto.setDate("2015-03-31");
 
         when(foodOrderRepository.save(any(FoodOrder.class))).thenReturn(new FoodOrder());
 
@@ -78,11 +75,8 @@ public class MealEndpoint {
         user.setName("Jihn Die");
         user.setId(2);
 
-        String str = "2015-03-31";
-        Date date = Date.valueOf(str);
-
         NewOrderDTO dto = new NewOrderDTO();
-        dto.setDate(str);
+        dto.setDate("2015-03-31");
 
         when(foodOrderRepository.save(any(FoodOrder.class))).thenReturn(new FoodOrder());
         when(jwtTokenProvider.resolveToken(any(HttpServletRequest.class))).thenReturn(bearerToken);

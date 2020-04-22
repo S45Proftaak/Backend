@@ -11,7 +11,7 @@ import java.util.Objects;
 public class FoodOrder {
     private int id;
     private User user;
-    private Date date;
+    private String date;
     private byte toLate;
 
     //region id
@@ -47,11 +47,11 @@ public class FoodOrder {
 
     @Basic
     @Column(name = "date")
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
