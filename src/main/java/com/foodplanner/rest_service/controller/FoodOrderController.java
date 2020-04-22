@@ -81,7 +81,7 @@ public class FoodOrderController {
         } catch (Exception e) {
             Map map = new HashMap();
             map.put("error", "No token found");
-            return new ResponseEntity<Object>(map, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
