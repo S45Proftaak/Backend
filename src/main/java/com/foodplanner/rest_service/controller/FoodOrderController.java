@@ -71,10 +71,12 @@ public class FoodOrderController {
         }
 
         if(token != null){
+            DateChecker checker = new DateChecker();
             User user = userRepository.findById(tokenProvider.getUserIdFromToken(token)).get();
             FoodOrder newOrder = new FoodOrder();
             newOrder.setUser(user);
             newOrder.setDate(date);
+            newOrder.setToLate((byte)(checker.areYouToLate(date)?1:0));
             foodOrderRepository.save(newOrder);
             return new ResponseEntity<Object>(HttpStatus.OK);
         }

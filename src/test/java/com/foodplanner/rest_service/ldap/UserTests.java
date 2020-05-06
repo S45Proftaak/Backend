@@ -1,4 +1,4 @@
-package com.foodplanner.rest_service;
+package com.foodplanner.rest_service.ldap;
 
 import com.foodplanner.rest_service.ldap.Person;
 import com.foodplanner.rest_service.ldap.PersonRepository;
