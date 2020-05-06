@@ -1,12 +1,15 @@
 package com.foodplanner.rest_service.controller;
 
 import com.foodplanner.rest_service.databasemodel.FoodOrder;
+import com.foodplanner.rest_service.databasemodel.Scoreboard;
 import com.foodplanner.rest_service.databasemodel.User;
 import com.foodplanner.rest_service.dtos.NewOrderDTO;
 import com.foodplanner.rest_service.logic.foodorder.DateChecker;
 import com.foodplanner.rest_service.logic.jwt.JwtTokenProvider;
 import com.foodplanner.rest_service.endpoints.OrderEndpoint;
+import com.foodplanner.rest_service.logic.scoreboard.PointDivider;
 import com.foodplanner.rest_service.repositories.FoodOrderRepository;
+import com.foodplanner.rest_service.repositories.ScoreBoardRepository;
 import com.foodplanner.rest_service.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +33,9 @@ public class FoodOrderController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ScoreBoardRepository scoreBoardRepository;
 
     private String resolvedToken = null;
 
@@ -59,11 +65,20 @@ public class FoodOrderController {
     public ResponseEntity<?> addNewFoodOrder(HttpServletRequest req, @RequestBody NewOrderDTO newOrderDTO) {
         if (resolveToken(req)) {
             DateChecker checker = new DateChecker();
+            PointDivider pointDivider = new PointDivider();
+            boolean tooLate = checker.areYouToLate(newOrderDTO.getDate());
             User user = userRepository.findById(tokenProvider.getUserIdFromToken(resolvedToken)).get();
+            Scoreboard scoreboard = scoreBoardRepository.findByUser(user);
             FoodOrder newOrder = new FoodOrder();
             newOrder.setUser(user);
             newOrder.setDate(newOrderDTO.getDate());
-            newOrder.setToLate(checker.areYouToLate(newOrderDTO.getDate()));
+            if(tooLate){
+                scoreboard.setPoints_too_late(pointDivider.addPointsTooLate(scoreboard.getPoints_too_late()));
+            }else{
+                scoreboard.setPoints_in_time(pointDivider.addPointsInTime(scoreboard.getPoints_in_time()));
+            }
+            newOrder.setToLate(tooLate);
+            scoreBoardRepository.save(scoreboard);
             foodOrderRepository.save(newOrder);
             return new ResponseEntity<>(HttpStatus.OK);
         }

@@ -23,7 +23,7 @@ public class Scoreboard {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    private User scoreBoardUser;
+    private User user;
 
 
     public Integer getScoreboard_id() {
@@ -53,11 +53,11 @@ public class Scoreboard {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     public User getUser() {
-        return scoreBoardUser;
+        return user;
     }
 
     public void setUser(User user) {
-        this.scoreBoardUser = user;
+        this.user = user;
     }
 
     public Scoreboard(){
@@ -67,6 +67,6 @@ public class Scoreboard {
     public Scoreboard(Long points_in_time, Long points_too_late, User user){
         this.points_in_time = points_in_time;
         this.points_too_late = points_too_late;
-        this.scoreBoardUser = user;
+        this.user = user;
     }
 }

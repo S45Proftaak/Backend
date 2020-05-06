@@ -5,7 +5,6 @@ import com.foodplanner.rest_service.databasemodel.Role;
 public class UserResponse {
     private Integer user_id;
     private String name;
-    private String email;
     private Role role;
 
     public UserResponse(){
@@ -26,14 +25,6 @@ public class UserResponse {
 
     public void setUser_id(Integer user_id) {
         this.user_id = user_id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public Role getRole() {

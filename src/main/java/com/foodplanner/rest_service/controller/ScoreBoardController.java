@@ -1,7 +1,7 @@
 package com.foodplanner.rest_service.controller;
 
 import com.foodplanner.rest_service.databasemodel.Scoreboard;
-import com.foodplanner.rest_service.dtos.response.Scoreboard.ScoreboardMostEatenResponse;
+import com.foodplanner.rest_service.dtos.response.Scoreboard.ScoreboardResponse;
 import com.foodplanner.rest_service.endpoints.ScoreBoardEndpoint;
 import com.foodplanner.rest_service.logic.jwt.JwtTokenProvider;
 import com.foodplanner.rest_service.repositories.ScoreBoardRepository;
@@ -31,9 +31,27 @@ public class ScoreBoardController {
 
     @GetMapping(ScoreBoardEndpoint.GET_SCOREBOARD_MOST_EATEN)
     public ResponseEntity<?> getScoreboardMostEaten(){
-        List<ScoreboardMostEatenResponse> response = new ArrayList<>();
+        List<ScoreboardResponse> response = new ArrayList<>();
         for(Scoreboard scoreboard : scoreBoardRepository.findAll()){
-            response.add(new ScoreboardMostEatenResponse(scoreboard.getUser(), (scoreboard.getPoints_in_time() + scoreboard.getPoints_too_late())));
+            response.add(new ScoreboardResponse(scoreboard.getUser(), (scoreboard.getPoints_in_time() + scoreboard.getPoints_too_late())));
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(ScoreBoardEndpoint.GET_SCOREBOARD_IN_TIME)
+    public ResponseEntity<?> getScoreboardInTime(){
+        List<ScoreboardResponse> response = new ArrayList<>();
+        for(Scoreboard scoreboard : scoreBoardRepository.findAll()){
+            response.add(new ScoreboardResponse(scoreboard.getUser(), scoreboard.getPoints_in_time()));
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(ScoreBoardEndpoint.GET_SCOREBOARD_TOO_LATE)
+    public ResponseEntity<?> getScoreboardTooLate(){
+        List<ScoreboardResponse> response = new ArrayList<>();
+        for(Scoreboard scoreboard : scoreBoardRepository.findAll()){
+            response.add(new ScoreboardResponse(scoreboard.getUser(), scoreboard.getPoints_too_late()));
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

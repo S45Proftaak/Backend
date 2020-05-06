@@ -63,7 +63,7 @@ public class User {
 
     private Scoreboard scoreboard;
 
-    @OneToOne(mappedBy = "scoreBoardUser")
+    @OneToOne(mappedBy = "user")
     @JsonBackReference
     public Scoreboard getScoreboard() {
         return scoreboard;
@@ -86,6 +86,10 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, email);
+    }
+
+    public User(){
+
     }
 
 
