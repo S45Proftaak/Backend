@@ -2,8 +2,8 @@ package com.foodplanner.rest_service.controller;
 
 import com.foodplanner.rest_service.databasemodel.FoodOrder;
 import com.foodplanner.rest_service.dtos.UserByDateDTO;
+import com.foodplanner.rest_service.endpoints.SecretaryEndpoint;
 import com.foodplanner.rest_service.logic.jwt.JwtTokenProvider;
-import com.foodplanner.rest_service.mappings.SecretaryEndpoint;
 import com.foodplanner.rest_service.repositories.FoodOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
