@@ -1,6 +1,6 @@
 package com.foodplanner.rest_service.dtos.links;
 
-import com.foodplanner.rest_service.mappings.SecretaryEndpoint;
+import com.foodplanner.rest_service.endpoints.SecretaryEndpoint;
 
 public class SecretaryLinks {
     public String BASE = SecretaryEndpoint.BASE;
