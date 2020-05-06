@@ -1,4 +1,4 @@
-package com.foodplanner.rest_service.mappings;
+package com.foodplanner.rest_service.endpoints;
 
 public interface SecretaryEndpoint {
     public String BASE = "/secretary";

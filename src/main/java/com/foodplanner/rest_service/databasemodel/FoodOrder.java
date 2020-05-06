@@ -1,11 +1,13 @@
 package com.foodplanner.rest_service.databasemodel;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.Objects;
 
+@SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
 @Table(name = "food_order", schema = "DeVoedselbank")
 public class FoodOrder {
@@ -33,6 +35,7 @@ public class FoodOrder {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "userid")
+    @JsonBackReference
     public User getUser() {
         return user;
     }

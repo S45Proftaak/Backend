@@ -3,10 +3,9 @@ package com.foodplanner.rest_service.controller;
 import com.foodplanner.rest_service.databasemodel.FoodOrder;
 import com.foodplanner.rest_service.databasemodel.User;
 import com.foodplanner.rest_service.dtos.NewOrderDTO;
-import com.foodplanner.rest_service.dtos.WeekDTO;
 import com.foodplanner.rest_service.logic.foodorder.DateChecker;
 import com.foodplanner.rest_service.logic.jwt.JwtTokenProvider;
-import com.foodplanner.rest_service.mappings.OrderMapping;
+import com.foodplanner.rest_service.endpoints.OrderEndpoint;
 import com.foodplanner.rest_service.repositories.FoodOrderRepository;
 import com.foodplanner.rest_service.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,19 +14,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 @RestController()
-@RequestMapping(value = OrderMapping.BASE)
+@RequestMapping(value = OrderEndpoint.BASE)
 @CrossOrigin
 public class FoodOrderController {
 
@@ -42,7 +33,7 @@ public class FoodOrderController {
 
     private String resolvedToken = null;
 
-    @GetMapping(value = OrderMapping.ALL_ORDERS)
+    @GetMapping(value = OrderEndpoint.ALL_ORDERS)
     @ResponseBody
     public ResponseEntity<?> getFoodOrdersByUserID(HttpServletRequest req) {
         if(resolveToken(req)){
@@ -52,7 +43,7 @@ public class FoodOrderController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping(value = OrderMapping.ORDERS_PER_WEEK)
+    @GetMapping(value = OrderEndpoint.ORDERS_PER_WEEK)
     @ResponseBody
     public ResponseEntity<?> getFoodOrdersPerWeek(HttpServletRequest req, @RequestParam List<String> dates) {
         if (resolveToken(req)) {
@@ -63,7 +54,7 @@ public class FoodOrderController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping(value = OrderMapping.ADD_ORDER)
+    @PostMapping(value = OrderEndpoint.ADD_ORDER)
     @ResponseBody
     public ResponseEntity<?> addNewFoodOrder(HttpServletRequest req, @RequestBody NewOrderDTO newOrderDTO) {
         if (resolveToken(req)) {
