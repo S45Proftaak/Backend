@@ -43,12 +43,6 @@ public class UserController {
     @PostMapping(value = AuthMapping.LOGIN)
     public ResponseEntity<?> loginUser(@RequestBody LoginDTO dto) {
         LoginReturnDTO returnDTO = new LoginReturnDTO();
-        returnDTO.addLink(new LinkDTO(OrderMapping.ALL_ORDERS));
-        returnDTO.addLink(new LinkDTO(OrderMapping.ORDERS_PER_WEEK));
-        returnDTO.addLink(new LinkDTO(OrderMapping.ADD_ORDER));
-        returnDTO.addLink(new LinkDTO(SecretaryEndpoint.GET_USERS_BY_DATE));
-        returnDTO.addLink(new LinkDTO(SecretaryEndpoint.GET_USERS_BETWEEN_DATES));
-
         if(ldapRepository.authenticateByEmail(dto.getEmail(), dto.getPassword())) {
             List<Person> ps = ldapRepository.findByEmail(dto.getEmail());
             Person p = ps.get(0);
