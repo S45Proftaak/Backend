@@ -1,5 +1,7 @@
 package com.foodplanner.rest_service.databasemodel;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
@@ -62,6 +64,7 @@ public class User {
     private Scoreboard scoreboard;
 
     @OneToOne(mappedBy = "scoreBoardUser")
+    @JsonBackReference
     public Scoreboard getScoreboard() {
         return scoreboard;
     }

@@ -1,5 +1,6 @@
 package com.foodplanner.rest_service.databasemodel;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.engine.internal.Cascade;
 
 import javax.persistence.*;
@@ -33,11 +34,11 @@ public class Scoreboard {
         this.scoreboard_id = scoreboard_id;
     }
 
-    public Long getPoints() {
+    public Long getPoints_in_time() {
         return points_in_time;
     }
 
-    public void setPoints(Long points_in_time) {
+    public void setPoints_in_time(Long points_in_time) {
         this.points_in_time = points_in_time;
     }
 
@@ -57,6 +58,10 @@ public class Scoreboard {
 
     public void setUser(User user) {
         this.scoreBoardUser = user;
+    }
+
+    public Scoreboard(){
+
     }
 
     public Scoreboard(Long points_in_time, Long points_too_late, User user){

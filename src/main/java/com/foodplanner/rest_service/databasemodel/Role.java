@@ -1,5 +1,7 @@
 package com.foodplanner.rest_service.databasemodel;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
@@ -49,6 +51,7 @@ public class Role {
     private Collection<User> users;
 
     @OneToMany(mappedBy = "role")
+    @JsonBackReference
     public Collection<User> getUsers() {
         return users;
     }
