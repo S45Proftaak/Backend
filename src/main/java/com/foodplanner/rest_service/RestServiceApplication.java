@@ -16,9 +16,6 @@ import java.util.List;
 
 @SpringBootApplication
 public class RestServiceApplication {
-
-    private static Logger log = LoggerFactory.getLogger(RestServiceApplication.class);
-
     @Autowired
     private PersonRepository personRepository;
 
@@ -26,14 +23,4 @@ public class RestServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(RestServiceApplication.class, args);
     }
-
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/greeting-javaconfig").allowedOrigins("http://localhost:3000");
-            }
-        };
-    }
-
 }
