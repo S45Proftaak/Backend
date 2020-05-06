@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.sql.Date;
 import java.util.Objects;
 
+@SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
 @Table(name = "food_order", schema = "DeVoedselbank")
 public class FoodOrder {

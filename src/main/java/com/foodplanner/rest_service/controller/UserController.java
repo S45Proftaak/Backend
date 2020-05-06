@@ -1,5 +1,6 @@
 package com.foodplanner.rest_service.controller;
 
+import com.foodplanner.rest_service.databasemodel.Scoreboard;
 import com.foodplanner.rest_service.databasemodel.User;
 import com.foodplanner.rest_service.dtos.LinkDTO;
 import com.foodplanner.rest_service.dtos.LoginDTO;
@@ -7,8 +8,8 @@ import com.foodplanner.rest_service.dtos.LoginReturnDTO;
 import com.foodplanner.rest_service.ldap.Person;
 import com.foodplanner.rest_service.ldap.PersonRepository;
 import com.foodplanner.rest_service.logic.jwt.JwtTokenProvider;
-import com.foodplanner.rest_service.mappings.AuthMapping;
-import com.foodplanner.rest_service.mappings.OrderMapping;
+import com.foodplanner.rest_service.endpoints.AuthEndpoint;
+import com.foodplanner.rest_service.endpoints.OrderEndpoint;
 import com.foodplanner.rest_service.repositories.RoleRepository;
 import com.foodplanner.rest_service.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RequestMapping("/auth")
 @RestController
@@ -39,12 +38,12 @@ public class UserController {
 
     User user = new User();
 
-    @PostMapping(value = AuthMapping.LOGIN)
+    @PostMapping(value = AuthEndpoint.LOGIN)
     public ResponseEntity<?> loginUser(@RequestBody LoginDTO dto) {
         LoginReturnDTO returnDTO = new LoginReturnDTO();
-        returnDTO.addLink(new LinkDTO(OrderMapping.ALL_ORDERS));
-        returnDTO.addLink(new LinkDTO(OrderMapping.ORDERS_PER_WEEK));
-        returnDTO.addLink(new LinkDTO(OrderMapping.ADD_ORDER));
+        returnDTO.addLink(new LinkDTO(OrderEndpoint.ALL_ORDERS));
+        returnDTO.addLink(new LinkDTO(OrderEndpoint.ORDERS_PER_WEEK));
+        returnDTO.addLink(new LinkDTO(OrderEndpoint.ADD_ORDER));
 
         if(ldapRepository.authenticateByEmail(dto.getEmail(), dto.getPassword())) {
             List<Person> ps = ldapRepository.findByEmail(dto.getEmail());
@@ -67,5 +66,6 @@ public class UserController {
         user.setEmail(email);
         user.setName(name);
         user.setRole(roleRepository.findByName(role));
+        user.setScoreboard(new Scoreboard(0L, 0L, user));
     }
 }

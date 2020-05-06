@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
 
+@SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
 @Table(name = "role", schema = "DeVoedselbank")
 public class Role {
