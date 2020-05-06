@@ -2,6 +2,7 @@ package com.foodplanner.rest_service.controller;
 
 import com.foodplanner.rest_service.databasemodel.FoodOrder;
 import com.foodplanner.rest_service.databasemodel.User;
+import com.foodplanner.rest_service.dtos.NewOrderDTO;
 import com.foodplanner.rest_service.dtos.WeekDTO;
 import com.foodplanner.rest_service.logic.foodorder.DateChecker;
 import com.foodplanner.rest_service.logic.jwt.JwtTokenProvider;
@@ -26,7 +27,7 @@ import java.util.logging.Logger;
 
 
 @RestController()
-@RequestMapping(value = "/foodorder")
+@RequestMapping(value = OrderMapping.BASE)
 @CrossOrigin
 public class FoodOrderController {
 
@@ -39,48 +40,47 @@ public class FoodOrderController {
     @Autowired
     private UserRepository userRepository;
 
+    private String resolvedToken = null;
+
     @GetMapping(value = OrderMapping.ALL_ORDERS)
     @ResponseBody
-    public List<FoodOrder> getFoodOrdersByUserID(HttpServletRequest req){
-        String token = tokenProvider.resolveToken(req);
-
-        User user = userRepository.findById(tokenProvider.getUserIdFromToken(token)).get();
-        return foodOrderRepository.findAllByUser(user);
+    public ResponseEntity<?> getFoodOrdersByUserID(HttpServletRequest req) {
+        if(resolveToken(req)){
+            User user = userRepository.findById(tokenProvider.getUserIdFromToken(resolvedToken)).get();
+            return new ResponseEntity<>(foodOrderRepository.findAllByUser(user), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping(value = OrderMapping.ORDERS_PER_WEEK)
     @ResponseBody
-    public List<String> getFoodOrdersPerWeek(HttpServletRequest req, @RequestParam List<String> dates){
-        String token = tokenProvider.resolveToken(req);
-        DateChecker checker = new DateChecker();
-
-        return checker.checkDates(foodOrderRepository.findAllByUser(userRepository.findById(tokenProvider.getUserIdFromToken(token)).get()),
-                dates);
+    public ResponseEntity<?> getFoodOrdersPerWeek(HttpServletRequest req, @RequestParam List<String> dates) {
+        if (resolveToken(req)) {
+            DateChecker checker = new DateChecker();
+            return new ResponseEntity<>(checker.checkDates(foodOrderRepository.findAllByUser(userRepository.findById(tokenProvider.getUserIdFromToken(resolvedToken)).get()),
+                    dates), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping(value = OrderMapping.ADD_ORDER)
     @ResponseBody
-    public ResponseEntity<Object> addNewFoodOrder (HttpServletRequest req, @RequestParam(value = "date") Date date){
-        String token = null;
-        try{
-            token = tokenProvider.resolveToken(req);
-        }catch (Exception e){
-            Map map = new HashMap();
-            map.put("error", "No token found");
-            return new ResponseEntity<Object>(map, HttpStatus.BAD_REQUEST);
-        }
-
-        if(token != null){
+    public ResponseEntity<?> addNewFoodOrder(HttpServletRequest req, @RequestBody NewOrderDTO newOrderDTO) {
+        if (resolveToken(req)) {
             DateChecker checker = new DateChecker();
-            User user = userRepository.findById(tokenProvider.getUserIdFromToken(token)).get();
+            User user = userRepository.findById(tokenProvider.getUserIdFromToken(resolvedToken)).get();
             FoodOrder newOrder = new FoodOrder();
             newOrder.setUser(user);
-            newOrder.setDate(date);
-            newOrder.setToLate((byte)(checker.areYouToLate(date)?1:0));
+            newOrder.setDate(newOrderDTO.getDate());
+            newOrder.setToLate(checker.areYouToLate(newOrderDTO.getDate()));
             foodOrderRepository.save(newOrder);
-            return new ResponseEntity<Object>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 
-        return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+    private boolean resolveToken(HttpServletRequest request) {
+        resolvedToken = tokenProvider.resolveToken(request);
+        return resolvedToken != null;
     }
 }

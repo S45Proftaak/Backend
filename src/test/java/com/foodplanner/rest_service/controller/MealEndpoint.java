@@ -2,6 +2,8 @@ package com.foodplanner.rest_service.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import com.foodplanner.rest_service.databasemodel.FoodOrder;
+import com.foodplanner.rest_service.databasemodel.User;
+import com.foodplanner.rest_service.dtos.NewOrderDTO;
 import com.foodplanner.rest_service.ldap.PersonRepository;
 import com.foodplanner.rest_service.logic.jwt.JwtTokenProvider;
 import com.foodplanner.rest_service.repositories.FoodOrderRepository;
@@ -19,6 +21,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Date;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -38,6 +41,9 @@ public class MealEndpoint {
     @Mock
     UserRepository userRepository;
 
+    @Mock
+    JwtTokenProvider jwtTokenProvider;
+
 
 
     @Test
@@ -46,12 +52,12 @@ public class MealEndpoint {
         MockHttpServletRequest request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 
-        String str = "2015-03-31";
-        Date date = Date.valueOf(str);
+        NewOrderDTO dto = new NewOrderDTO();
+        dto.setDate(Date.valueOf("2015-03-31"));
 
         when(foodOrderRepository.save(any(FoodOrder.class))).thenReturn(new FoodOrder());
 
-        ResponseEntity<Object> responseEntity = foodOrderController.addNewFoodOrder(request, date);
+        ResponseEntity<?> responseEntity = foodOrderController.addNewFoodOrder(request, dto);
 
         assertThat(responseEntity.getStatusCodeValue()).isEqualTo(400);
     }
@@ -59,17 +65,23 @@ public class MealEndpoint {
     @Test
     public void getFoodOrder_Accepted() {
         String bearerToken = provider.createToken(2, "Jihn Die", "Employee");
+
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader("Authorization", "Bearer " + bearerToken);
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 
-        String str = "2015-03-31";
-        Date date = Date.valueOf(str);
+        User user = new User();
+        user.setName("Jihn Die");
+        user.setId(2);
+
+        NewOrderDTO dto = new NewOrderDTO();
+        dto.setDate(Date.valueOf("2015-03-31"));
 
         when(foodOrderRepository.save(any(FoodOrder.class))).thenReturn(new FoodOrder());
-        when(provider.resolveToken(any(HttpServletRequest.class))).thenReturn(bearerToken);
+        when(jwtTokenProvider.resolveToken(any(HttpServletRequest.class))).thenReturn(bearerToken);
+        when(userRepository.findById(any(Integer.class))).thenReturn(Optional.of(user));
 
-        ResponseEntity<Object> responseEntity = foodOrderController.addNewFoodOrder(request, date);
+        ResponseEntity<?> responseEntity = foodOrderController.addNewFoodOrder(request, dto);
 
         assertThat(responseEntity.getStatusCodeValue()).isEqualTo(200);
     }

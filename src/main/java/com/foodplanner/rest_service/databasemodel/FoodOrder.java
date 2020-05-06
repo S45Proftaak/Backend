@@ -12,11 +12,12 @@ public class FoodOrder {
     private int id;
     private User user;
     private Date date;
-    private byte toLate;
+    private boolean toLate;
 
     //region id
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     public int getId() {
         return id;
@@ -60,11 +61,11 @@ public class FoodOrder {
 
     @Basic
     @Column(name = "to_late")
-    public byte getToLate() {
+    public boolean getToLate() {
         return toLate;
     }
 
-    public void setToLate(byte toLate) {
+    public void setToLate(boolean toLate) {
         this.toLate = toLate;
     }
 
