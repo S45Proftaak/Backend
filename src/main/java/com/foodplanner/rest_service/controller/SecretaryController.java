@@ -3,6 +3,7 @@ package com.foodplanner.rest_service.controller;
 import com.foodplanner.rest_service.databasemodel.FoodOrder;
 import com.foodplanner.rest_service.dtos.UserByDateDTO;
 import com.foodplanner.rest_service.logic.jwt.JwtTokenProvider;
+import com.foodplanner.rest_service.mappings.SecretaryEndpoint;
 import com.foodplanner.rest_service.repositories.FoodOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ import java.util.TimeZone;
 
 @RestController
 @RequestMapping(value = "/admin")
-public class AdminController {
+public class SecretaryController {
 
     @Autowired
     private JwtTokenProvider jwtProvider;
@@ -31,7 +32,7 @@ public class AdminController {
 
     private static final String ALLOWEDROLE = "Secretary";
 
-    @GetMapping(value = "/getUsersByDate", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = SecretaryEndpoint.GET_USERS_BY_DATE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUsersByDate(@RequestParam Date date, HttpServletRequest request){
         String token = jwtProvider.resolveToken(request);
         String role = jwtProvider.getRoleFromToken(token);
@@ -46,7 +47,7 @@ public class AdminController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/getUsersBetweenDates", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = SecretaryEndpoint.GET_USERS_BETWEEN_DATES, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUsersBetweenDates(@RequestParam Date start, @RequestParam Date end, HttpServletRequest request){
         String token = jwtProvider.resolveToken(request);
         String role = jwtProvider.getRoleFromToken(token);

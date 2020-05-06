@@ -9,6 +9,7 @@ import com.foodplanner.rest_service.ldap.PersonRepository;
 import com.foodplanner.rest_service.logic.jwt.JwtTokenProvider;
 import com.foodplanner.rest_service.mappings.AuthMapping;
 import com.foodplanner.rest_service.mappings.OrderMapping;
+import com.foodplanner.rest_service.mappings.SecretaryEndpoint;
 import com.foodplanner.rest_service.repositories.RoleRepository;
 import com.foodplanner.rest_service.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,8 @@ public class UserController {
         returnDTO.addLink(new LinkDTO(OrderMapping.ALL_ORDERS));
         returnDTO.addLink(new LinkDTO(OrderMapping.ORDERS_PER_WEEK));
         returnDTO.addLink(new LinkDTO(OrderMapping.ADD_ORDER));
+        returnDTO.addLink(new LinkDTO(SecretaryEndpoint.GET_USERS_BY_DATE));
+        returnDTO.addLink(new LinkDTO(SecretaryEndpoint.GET_USERS_BETWEEN_DATES));
 
         if(ldapRepository.authenticateByEmail(dto.getEmail(), dto.getPassword())) {
             List<Person> ps = ldapRepository.findByEmail(dto.getEmail());
