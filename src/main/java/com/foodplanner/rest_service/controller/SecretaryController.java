@@ -42,7 +42,7 @@ public class SecretaryController {
         List<FoodOrder> orders = foodOrderRepository.findAllByDate(date);
         List<UserByDateDTO> dto = new ArrayList<>();
         for (FoodOrder order: orders) {
-            dto.add(new UserByDateDTO(order.getUser().getName(), order.getToLate()));
+            dto.add(new UserByDateDTO(order.getUser().getName(), order.getDate(), order.getToLate()));
         }
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
@@ -57,7 +57,7 @@ public class SecretaryController {
         List<FoodOrder> orders = foodOrderRepository.findAllByDateBetween(start, end);
         List<UserByDateDTO> dto = new ArrayList<>();
         for (FoodOrder order: orders){
-            dto.add(new UserByDateDTO(order.getUser().getName(), order.getToLate()));
+            dto.add(new UserByDateDTO(order.getUser().getName(), order.getDate(),order.getToLate()));
         }
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
