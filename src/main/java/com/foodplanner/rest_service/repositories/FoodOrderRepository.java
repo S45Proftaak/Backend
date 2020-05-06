@@ -9,4 +9,8 @@ import java.util.List;
 
 public interface FoodOrderRepository extends CrudRepository<FoodOrder, Integer> {
     List<FoodOrder> findAllByUser(User user);
+
+    List<FoodOrder> findAllByDate(Date date);
+
+    List<FoodOrder> findAllByDateBetween(Date start, Date end);
 }
