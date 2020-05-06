@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 @RestController
-@RequestMapping(value = "/admin")
+@RequestMapping(value = SecretaryEndpoint.BASE)
 public class SecretaryController {
 
     @Autowired
