@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 
 
 @RestController()
-@RequestMapping(value = "/foodorder")
+@RequestMapping(value = OrderMapping.BASE)
 @CrossOrigin
 public class FoodOrderController {
 

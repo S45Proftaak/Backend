@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RequestMapping("/auth")
+@RequestMapping(value = AuthMapping.BASE)
 @RestController
 @CrossOrigin
 public class UserController {
