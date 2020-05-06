@@ -2,7 +2,11 @@ package com.foodplanner.rest_service.logic.foodorder;
 
 import com.foodplanner.rest_service.databasemodel.FoodOrder;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DateChecker {
@@ -17,5 +21,14 @@ public class DateChecker {
             }
         }
         return foundDates;
+    }
+    public Boolean areYouToLate(Date date)
+    {
+        Date now = new Date();
+        if(now.after(date))
+        {
+            return true;
+        }
+        return false;
     }
 }

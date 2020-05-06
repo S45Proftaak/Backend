@@ -1,14 +1,18 @@
 package com.foodplanner.rest_service.dtos;
 
+import com.foodplanner.rest_service.dtos.links.OrderLinks;
+import com.foodplanner.rest_service.dtos.links.SecretaryLinks;
+
 public class LinkDTO {
 
-    String link;
+    OrderLinks orderLinks = new OrderLinks();
+    SecretaryLinks secretaryLinks = new SecretaryLinks();
 
-    public LinkDTO(String link){
-        this.link = link;
+    public OrderLinks getOrderLinks() {
+        return orderLinks;
     }
 
-    public String getLink() {
-        return link;
+    public SecretaryLinks getSecretaryLinks() {
+        return secretaryLinks;
     }
 }

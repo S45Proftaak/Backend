@@ -7,25 +7,20 @@ public class LoginReturnDTO {
 
     String token;
 
-    public List<LinkDTO> links;
+    public LinkDTO links = new LinkDTO();
 
     public LoginReturnDTO(){
-        links = new ArrayList<>();
     }
 
     public void setToken(String token) {
         this.token = token;
     }
 
-    public void addLink(LinkDTO link) {
-        links.add(link);
-    }
-
     public String getToken() {
         return token;
     }
 
-    public List<LinkDTO> getLinks() {
+    public LinkDTO getLinks() {
         return links;
     }
 }

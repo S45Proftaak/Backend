@@ -18,7 +18,7 @@ import java.util.List;
 
 
 @RestController()
-@RequestMapping(value = "/foodorder")
+@RequestMapping(value = OrderEndpoint.BASE)
 @CrossOrigin
 public class FoodOrderController {
 
@@ -58,10 +58,12 @@ public class FoodOrderController {
     @ResponseBody
     public ResponseEntity<?> addNewFoodOrder(HttpServletRequest req, @RequestBody NewOrderDTO newOrderDTO) {
         if (resolveToken(req)) {
+            DateChecker checker = new DateChecker();
             User user = userRepository.findById(tokenProvider.getUserIdFromToken(resolvedToken)).get();
             FoodOrder newOrder = new FoodOrder();
             newOrder.setUser(user);
             newOrder.setDate(newOrderDTO.getDate());
+            newOrder.setToLate(checker.areYouToLate(newOrderDTO.getDate()));
             foodOrderRepository.save(newOrder);
             return new ResponseEntity<>(HttpStatus.OK);
         }
