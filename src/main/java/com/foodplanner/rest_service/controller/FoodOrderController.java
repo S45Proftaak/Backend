@@ -38,12 +38,10 @@ public class FoodOrderController {
     @Autowired
     private ScoreBoardRepository scoreBoardRepository;
 
-    private String resolvedToken = null;
-
     @GetMapping(value = OrderEndpoint.ALL_ORDERS)
     @ResponseBody
     public ResponseEntity<?> getFoodOrdersByUserID(HttpServletRequest request) {
-        resolveToken(request);
+        String resolvedToken = tokenProvider.resolveToken(request);
         User user = userRepository.findById(tokenProvider.getUserIdFromToken(resolvedToken)).get();
         return new ResponseEntity<>(foodOrderRepository.findAllByUser(user), HttpStatus.OK);
     }
@@ -51,7 +49,10 @@ public class FoodOrderController {
     @GetMapping(value = OrderEndpoint.ORDERS_PER_WEEK)
     @ResponseBody
     public ResponseEntity<?> getFoodOrdersPerWeek(@RequestParam List<String> dates, HttpServletRequest request) {
-        resolveToken(request);
+        String resolvedToken = tokenProvider.resolveToken(request);
+        if(dates.size() > 5){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         DateChecker checker = new DateChecker();
         return new ResponseEntity<>(checker.checkDates(foodOrderRepository.findAllByUser(userRepository.findById(tokenProvider.getUserIdFromToken(resolvedToken)).get()),
                 dates), HttpStatus.OK);
@@ -60,7 +61,7 @@ public class FoodOrderController {
     @PostMapping(value = OrderEndpoint.ADD_ORDER)
     @ResponseBody
     public ResponseEntity<?> addNewFoodOrder(@RequestBody NewOrderDTO newOrderDTO, HttpServletRequest request) {
-        resolveToken(request);
+        String resolvedToken = tokenProvider.resolveToken(request);
         User user = userRepository.findById(tokenProvider.getUserIdFromToken(resolvedToken)).get();
         Scoreboard scoreboard = scoreBoardRepository.findByUser(user);
         FoodOrder foundOrder = foodOrderRepository.findByUserAndDate(user, newOrderDTO.getDate());
@@ -72,9 +73,5 @@ public class FoodOrderController {
             orderHandler.handleNewOrder(user, newOrderDTO, scoreboard, foodOrderRepository, scoreBoardRepository);
         }
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    private void resolveToken(HttpServletRequest request) {
-        this.resolvedToken = tokenProvider.resolveToken(request);
     }
 }
