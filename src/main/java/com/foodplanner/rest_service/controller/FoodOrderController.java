@@ -5,6 +5,7 @@ import com.foodplanner.rest_service.databasemodel.Scoreboard;
 import com.foodplanner.rest_service.databasemodel.User;
 import com.foodplanner.rest_service.dtos.NewOrderDTO;
 import com.foodplanner.rest_service.logic.foodorder.DateChecker;
+import com.foodplanner.rest_service.logic.foodorder.OrderHandler;
 import com.foodplanner.rest_service.logic.jwt.JwtTokenProvider;
 import com.foodplanner.rest_service.endpoints.OrderEndpoint;
 import com.foodplanner.rest_service.logic.scoreboard.PointDivider;
@@ -41,52 +42,39 @@ public class FoodOrderController {
 
     @GetMapping(value = OrderEndpoint.ALL_ORDERS)
     @ResponseBody
-    public ResponseEntity<?> getFoodOrdersByUserID(HttpServletRequest req) {
-        if(resolveToken(req)){
-            User user = userRepository.findById(tokenProvider.getUserIdFromToken(resolvedToken)).get();
-            return new ResponseEntity<>(foodOrderRepository.findAllByUser(user), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> getFoodOrdersByUserID(HttpServletRequest request) {
+        resolveToken(request);
+        User user = userRepository.findById(tokenProvider.getUserIdFromToken(resolvedToken)).get();
+        return new ResponseEntity<>(foodOrderRepository.findAllByUser(user), HttpStatus.OK);
     }
 
     @GetMapping(value = OrderEndpoint.ORDERS_PER_WEEK)
     @ResponseBody
-    public ResponseEntity<?> getFoodOrdersPerWeek(HttpServletRequest req, @RequestParam List<String> dates) {
-        if (resolveToken(req)) {
-            DateChecker checker = new DateChecker();
-            return new ResponseEntity<>(checker.checkDates(foodOrderRepository.findAllByUser(userRepository.findById(tokenProvider.getUserIdFromToken(resolvedToken)).get()),
-                    dates), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> getFoodOrdersPerWeek(@RequestParam List<String> dates, HttpServletRequest request) {
+        resolveToken(request);
+        DateChecker checker = new DateChecker();
+        return new ResponseEntity<>(checker.checkDates(foodOrderRepository.findAllByUser(userRepository.findById(tokenProvider.getUserIdFromToken(resolvedToken)).get()),
+                dates), HttpStatus.OK);
     }
 
     @PostMapping(value = OrderEndpoint.ADD_ORDER)
     @ResponseBody
-    public ResponseEntity<?> addNewFoodOrder(HttpServletRequest req, @RequestBody NewOrderDTO newOrderDTO) {
-        if (resolveToken(req)) {
-            DateChecker checker = new DateChecker();
-            PointDivider pointDivider = new PointDivider();
-            boolean tooLate = checker.areYouToLate(newOrderDTO.getDate());
-            User user = userRepository.findById(tokenProvider.getUserIdFromToken(resolvedToken)).get();
-            Scoreboard scoreboard = scoreBoardRepository.findByUser(user);
-            FoodOrder newOrder = new FoodOrder();
-            newOrder.setUser(user);
-            newOrder.setDate(newOrderDTO.getDate());
-            if(tooLate){
-                scoreboard.setPoints_too_late(pointDivider.addPointsTooLate(scoreboard.getPoints_too_late()));
-            }else{
-                scoreboard.setPoints_in_time(pointDivider.addPointsInTime(scoreboard.getPoints_in_time()));
-            }
-            newOrder.setToLate(tooLate);
-            scoreBoardRepository.save(scoreboard);
-            foodOrderRepository.save(newOrder);
-            return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> addNewFoodOrder(@RequestBody NewOrderDTO newOrderDTO, HttpServletRequest request) {
+        resolveToken(request);
+        User user = userRepository.findById(tokenProvider.getUserIdFromToken(resolvedToken)).get();
+        Scoreboard scoreboard = scoreBoardRepository.findByUser(user);
+        FoodOrder foundOrder = foodOrderRepository.findByUserAndDate(user, newOrderDTO.getDate());
+        OrderHandler orderHandler = new OrderHandler();
+
+        if(foundOrder != null){
+           orderHandler.handleExistingOrder(user, newOrderDTO, scoreboard, foodOrderRepository);
+        }else{
+            orderHandler.handleNewOrder(user, newOrderDTO, scoreboard, foodOrderRepository, scoreBoardRepository);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private boolean resolveToken(HttpServletRequest request) {
-        resolvedToken = tokenProvider.resolveToken(request);
-        return resolvedToken != null;
+    private void resolveToken(HttpServletRequest request) {
+        this.resolvedToken = tokenProvider.resolveToken(request);
     }
 }

@@ -13,4 +13,6 @@ public interface FoodOrderRepository extends CrudRepository<FoodOrder, Integer> 
     List<FoodOrder> findAllByDate(Date date);
 
     List<FoodOrder> findAllByDateBetween(Date start, Date end);
+
+    FoodOrder findByUserAndDate(User user, Date date);
 }

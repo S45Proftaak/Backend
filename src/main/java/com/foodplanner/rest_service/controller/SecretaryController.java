@@ -25,6 +25,7 @@ public class SecretaryController {
 
     @Autowired
     private JwtTokenProvider jwtProvider;
+
     @Autowired
     private FoodOrderRepository foodOrderRepository;
 
@@ -59,5 +60,4 @@ public class SecretaryController {
         }
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
-
 }

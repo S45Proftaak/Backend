@@ -22,6 +22,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
+                .antMatchers("/foodorder/**").permitAll()
+                .antMatchers("/secretary/**").permitAll()
+                .antMatchers("/scoreboard/**").permitAll()
                 .and()
                 .cors()
                 .and()

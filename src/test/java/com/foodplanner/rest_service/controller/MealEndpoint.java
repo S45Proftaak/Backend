@@ -57,7 +57,7 @@ public class MealEndpoint {
 
         when(foodOrderRepository.save(any(FoodOrder.class))).thenReturn(new FoodOrder());
 
-        ResponseEntity<?> responseEntity = foodOrderController.addNewFoodOrder(request, dto);
+        ResponseEntity<?> responseEntity = foodOrderController.addNewFoodOrder(dto, request);
 
         assertThat(responseEntity.getStatusCodeValue()).isEqualTo(400);
     }
@@ -81,7 +81,7 @@ public class MealEndpoint {
         when(jwtTokenProvider.resolveToken(any(HttpServletRequest.class))).thenReturn(bearerToken);
         when(userRepository.findById(any(Integer.class))).thenReturn(Optional.of(user));
 
-        ResponseEntity<?> responseEntity = foodOrderController.addNewFoodOrder(request, dto);
+        ResponseEntity<?> responseEntity = foodOrderController.addNewFoodOrder(dto, request);
 
         assertThat(responseEntity.getStatusCodeValue()).isEqualTo(200);
     }
