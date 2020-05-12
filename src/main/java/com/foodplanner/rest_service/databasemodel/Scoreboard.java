@@ -8,7 +8,7 @@ import javax.persistence.*;
 @SuppressWarnings({"JpaDataSourceORMInspection", "JpaObjectClassSignatureInspection"})
 @Entity
 @Table(name = "scoreboard")
-public class Scoreboard {
+public class Scoreboard implements Comparable<Scoreboard>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -68,5 +68,10 @@ public class Scoreboard {
         this.points_in_time = points_in_time;
         this.points_too_late = points_too_late;
         this.user = user;
+    }
+
+    @Override
+    public int compareTo(Scoreboard o) {
+        return this.getPoints_in_time().compareTo(o.getPoints_in_time());
     }
 }
