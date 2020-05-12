@@ -2,7 +2,7 @@ package com.foodplanner.rest_service.dtos.response.Scoreboard;
 
 import com.foodplanner.rest_service.databasemodel.User;
 
-public class ScoreboardResponse {
+public class ScoreboardResponse implements Comparable<ScoreboardResponse>{
     public UserResponse user;
     private final Long totalPoints;
 
@@ -24,5 +24,10 @@ public class ScoreboardResponse {
         this.user.setName(user.getName());
         this.user.setRole(user.getRole());
         this.user.setUser_id(user.getId());
+    }
+
+    @Override
+    public int compareTo(ScoreboardResponse o) {
+        return this.totalPoints.compareTo(o.totalPoints);
     }
 }
