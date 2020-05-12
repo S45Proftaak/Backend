@@ -1,20 +1,25 @@
 package com.foodplanner.rest_service.databasemodel;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.Objects;
 
+@SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
 @Table(name = "food_order", schema = "DeVoedselbank")
 public class FoodOrder {
     private int id;
     private User user;
     private Date date;
-    private byte toLate;
+    private boolean toLate;
 
     //region id
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     public int getId() {
         return id;
@@ -30,30 +35,13 @@ public class FoodOrder {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "userid")
+    @JsonBackReference
     public User getUser() {
         return user;
     }
 
     public void setUser(User userid) {
         this.user = userid;
-    }
-
-    //endregion
-
-    //region meal one to one
-
-
-    private Meal meal;
-
-    @OneToOne(optional = false)
-    @JoinColumn(name = "meal", referencedColumnName = "id")
-
-    public Meal getMeal() {
-        return meal;
-    }
-
-    public void setMeal(Meal meal) {
-        this.meal = meal;
     }
 
     //endregion
@@ -76,11 +64,11 @@ public class FoodOrder {
 
     @Basic
     @Column(name = "to_late")
-    public byte getToLate() {
+    public boolean getToLate() {
         return toLate;
     }
 
-    public void setToLate(byte toLate) {
+    public void setToLate(boolean toLate) {
         this.toLate = toLate;
     }
 

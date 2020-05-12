@@ -1,11 +1,14 @@
 package com.foodplanner.rest_service.databasemodel;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+@SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
 @Table(name = "user", schema = "DeVoedselbank")
 public class User {
@@ -14,6 +17,7 @@ public class User {
     private String email;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     public int getId() {
         return id;
@@ -56,6 +60,19 @@ public class User {
         this.role = role;
     }
 
+
+    private Scoreboard scoreboard;
+
+    @OneToOne(mappedBy = "user")
+    @JsonBackReference
+    public Scoreboard getScoreboard() {
+        return scoreboard;
+    }
+
+    public void setScoreboard(Scoreboard scoreboard) {
+        this.scoreboard = scoreboard;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -69,6 +86,10 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, email);
+    }
+
+    public User(){
+
     }
 
 

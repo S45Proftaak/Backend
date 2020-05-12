@@ -1,0 +1,10 @@
+package com.foodplanner.rest_service.dtos.links;
+
+import com.foodplanner.rest_service.endpoints.OrderEndpoint;
+
+public class OrderLinks {
+    public String BASE = OrderEndpoint.BASE;
+    public String ALL_ORDERS = OrderEndpoint.ALL_ORDERS;
+    public String ORDERS_PER_WEEK = OrderEndpoint.ORDERS_PER_WEEK;
+    public String ADD_ORDER = OrderEndpoint.ADD_ORDER;
+}
