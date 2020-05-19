@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,15 +30,9 @@ public class SecretaryController {
     @Autowired
     private FoodOrderRepository foodOrderRepository;
 
-    private static final String ALLOWEDROLE = "Secretary";
-
+    @PreAuthorize("hasRole('ROLE_Secretary')")
     @GetMapping(value = SecretaryEndpoint.GET_USERS_BY_DATE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getUsersByDate(@RequestParam Date date, HttpServletRequest request){
-        String token = jwtProvider.resolveToken(request);
-        String role = jwtProvider.getRoleFromToken(token);
-        if(!role.equals(ALLOWEDROLE)){
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+    public ResponseEntity<?> getUsersByDate(@RequestParam Date date){
         List<FoodOrder> orders = foodOrderRepository.findAllByDate(date);
         List<UserByDateDTO> dto = new ArrayList<>();
         for (FoodOrder order: orders) {
@@ -46,13 +41,9 @@ public class SecretaryController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ROLE_Secretary')")
     @GetMapping(value = SecretaryEndpoint.GET_USERS_BETWEEN_DATES, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getUsersBetweenDates(@RequestParam Date start, @RequestParam Date end, HttpServletRequest request){
-        String token = jwtProvider.resolveToken(request);
-        String role = jwtProvider.getRoleFromToken(token);
-        if(!role.equals(ALLOWEDROLE)){
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+    public ResponseEntity<?> getUsersBetweenDates(@RequestParam Date start, @RequestParam Date end){
         List<FoodOrder> orders = foodOrderRepository.findAllByDateBetween(start, end);
         List<UserByDateDTO> dto = new ArrayList<>();
         for (FoodOrder order: orders){

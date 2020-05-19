@@ -24,10 +24,11 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(int user_id, String username, String role) {
+    public String createToken(int user_id, String username, String role, String email) {
         Claims claims = Jwts.claims().setId(Integer.toString(user_id));
         claims.put("username", username);
         claims.put("role", role);
+        claims.put("email", email);
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
@@ -50,6 +51,10 @@ public class JwtTokenProvider {
 
     public String getRoleFromToken(String token) {
         return (String) Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("role");
+    }
+
+    public String getEmailFromToken(String token) {
+        return (String) Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("email");
     }
 
     public String resolveToken(HttpServletRequest req) {
