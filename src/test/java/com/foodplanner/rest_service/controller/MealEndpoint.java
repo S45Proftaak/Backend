@@ -64,7 +64,7 @@ public class MealEndpoint {
 
     @Test
     public void getFoodOrder_Accepted() {
-        String bearerToken = provider.createToken(2, "Jihn Die", "Employee");
+        String bearerToken = provider.createToken(2, "Jihn Die", "Employee", "testemail@gmail.com");
 
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader("Authorization", "Bearer " + bearerToken);
