@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WeekDTO {
-    private List<Date> dates;
+    private final List<Date> dates;
 
     public WeekDTO(){
         dates = new ArrayList<>();
