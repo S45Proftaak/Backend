@@ -10,13 +10,16 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
 @RestController
 @RequestMapping(value = AdministrationEndpoints.BASE)
-//@PreAuthorize(value = "hasRole('ROLE_ADMIN')")
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+@PreAuthorize(value = "hasRole('ROLE_ADMIN')")
 public class AdministrationController {
 
     @Autowired

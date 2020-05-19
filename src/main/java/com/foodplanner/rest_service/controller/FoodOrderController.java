@@ -1,9 +1,11 @@
 package com.foodplanner.rest_service.controller;
 
+import com.foodplanner.rest_service.configuration.PriceConfiguration;
 import com.foodplanner.rest_service.databasemodel.FoodOrder;
 import com.foodplanner.rest_service.databasemodel.Scoreboard;
 import com.foodplanner.rest_service.databasemodel.User;
 import com.foodplanner.rest_service.dtos.NewOrderDTO;
+import com.foodplanner.rest_service.dtos.food_order.response.GetPriceDTO;
 import com.foodplanner.rest_service.logic.foodorder.DateChecker;
 import com.foodplanner.rest_service.logic.foodorder.OrderHandler;
 import com.foodplanner.rest_service.logic.jwt.JwtTokenProvider;
@@ -37,6 +39,9 @@ public class FoodOrderController {
 
     @Autowired
     private ScoreBoardRepository scoreBoardRepository;
+
+    @Autowired
+    private PriceConfiguration configuration;
 
     @GetMapping(value = OrderEndpoint.ALL_ORDERS)
     @ResponseBody
@@ -73,5 +78,11 @@ public class FoodOrderController {
             orderHandler.handleNewOrder(user, newOrderDTO, scoreboard, foodOrderRepository, scoreBoardRepository);
         }
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(value = OrderEndpoint.GET_CURRENT_PRICE)
+    public ResponseEntity<?> getCurrentPrice(){
+        double currentPrice = configuration.getPrice();
+        return new ResponseEntity(new GetPriceDTO(currentPrice), HttpStatus.OK);
     }
 }
