@@ -1,26 +1,18 @@
 package com.foodplanner.rest_service;
 
-import com.foodplanner.rest_service.ldap.Person;
-import com.foodplanner.rest_service.ldap.PersonRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.foodplanner.rest_service.configuration.PriceConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.annotation.PostConstruct;
-import java.util.List;
 
 @SpringBootApplication
+@EnableConfigurationProperties(value = PriceConfiguration.class)
+@PropertySource("classpath:settings.properties")
 public class RestServiceApplication {
-    @Autowired
-    private PersonRepository personRepository;
-
-
     public static void main(String[] args) {
         SpringApplication.run(RestServiceApplication.class, args);
     }
+
 }
