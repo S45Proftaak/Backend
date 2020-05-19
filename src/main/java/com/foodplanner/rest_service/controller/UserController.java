@@ -35,9 +35,6 @@ public class UserController {
     @Autowired
     private RoleRepository roleRepository;
 
-    @Autowired
-    AuthenticationManager authenticationManager;
-
     User user = new User();
 
     @PostMapping(value = AuthEndpoint.LOGIN)
