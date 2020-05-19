@@ -42,7 +42,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
             }catch (JwtException e) {
-                httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
+                httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
                 return;
             }
         }

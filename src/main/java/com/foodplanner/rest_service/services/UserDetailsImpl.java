@@ -11,10 +11,10 @@ import java.util.List;
 
 public class UserDetailsImpl implements UserDetails {
 
-    private int user_id;
-    private String username;
-    private String email;
-    private Collection<? extends GrantedAuthority> authorities;
+    private final int user_id;
+    private final String username;
+    private final String email;
+    private final Collection<? extends GrantedAuthority> authorities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
