@@ -1,8 +1,9 @@
 package com.foodplanner.rest_service.dtos.response.Scoreboard;
 
 import com.foodplanner.rest_service.databasemodel.Role;
+import org.springframework.hateoas.RepresentationModel;
 
-public class UserResponse {
+public class UserResponse extends RepresentationModel<UserResponse> {
     private Integer user_id;
     private String name;
     private Role role;

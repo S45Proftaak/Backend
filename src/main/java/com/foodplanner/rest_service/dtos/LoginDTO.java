@@ -1,6 +1,6 @@
 package com.foodplanner.rest_service.dtos;
 
-public class LoginDTO {
+public class LoginDTO{
     private String email;
     private String password;
 

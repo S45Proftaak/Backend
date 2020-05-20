@@ -1,13 +1,11 @@
 package com.foodplanner.rest_service.dtos;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.hateoas.RepresentationModel;
 
-public class LoginReturnDTO {
+
+public class LoginReturnDTO extends RepresentationModel<LoginReturnDTO> {
 
     String token;
-
-    public LinkDTO links = new LinkDTO();
 
     public LoginReturnDTO(){
     }
@@ -18,9 +16,5 @@ public class LoginReturnDTO {
 
     public String getToken() {
         return token;
-    }
-
-    public LinkDTO getLinks() {
-        return links;
     }
 }

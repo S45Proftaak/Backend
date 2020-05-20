@@ -1,8 +1,9 @@
 package com.foodplanner.rest_service.dtos.administration.response;
 
 import com.foodplanner.rest_service.databasemodel.Role;
+import org.springframework.hateoas.RepresentationModel;
 
-public class RolesDTO {
+public class RolesDTO extends RepresentationModel<RolesDTO> {
 
     public Iterable<Role> roles;
 

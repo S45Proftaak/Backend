@@ -1,6 +1,8 @@
 package com.foodplanner.rest_service.dtos.food_order.response;
 
-public class GetPriceDTO {
+import org.springframework.hateoas.RepresentationModel;
+
+public class GetPriceDTO extends RepresentationModel<GetPriceDTO> {
 
     private double price;
 

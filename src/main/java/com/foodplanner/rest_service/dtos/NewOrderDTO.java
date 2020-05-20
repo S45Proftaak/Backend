@@ -6,6 +6,12 @@ public class NewOrderDTO {
 
     public Date date;
 
+    public NewOrderDTO(Date date){
+        this.date = date;
+    }
+
+    public NewOrderDTO(){}
+
     public Date getDate() {
         return date;
     }

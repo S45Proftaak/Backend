@@ -40,9 +40,10 @@ public class AdministrationController {
     private RoleRepository roleRepository;
 
     @PutMapping(value = AdministrationEndpoints.UPDATE_PRICE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void updatePrice(@RequestBody UpdatePriceDTO priceDTO) throws FileNotWritable {
+    public ResponseEntity<?> updatePrice(@RequestBody UpdatePriceDTO priceDTO) throws FileNotWritable {
         priceConfiguration.setPrice(priceDTO.getPrice());
         WritePropperties.writePropsToFile("configuration.price", priceDTO.getPrice(), "settings.properties");
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping(value = AdministrationEndpoints.GET_ALL_USERS, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -61,11 +62,12 @@ public class AdministrationController {
     }
 
     @PutMapping(value = AdministrationEndpoints.UPDATE_USER_ROLE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void updateUserRole(@RequestBody UpdateUserRoleDTO dto){
+    public ResponseEntity<?> updateUserRole(@RequestBody UpdateUserRoleDTO dto){
         User user = userRepository.findById(dto.getUserID()).get();
         Role role = roleRepository.findById(dto.getRoleID()).get();
         user.setRole(role);
         userRepository.save(user);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping(value = AdministrationEndpoints.GET_ROLES, produces = MediaType.APPLICATION_JSON_VALUE)

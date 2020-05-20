@@ -1,8 +1,9 @@
 package com.foodplanner.rest_service.dtos.response.Scoreboard;
 
 import com.foodplanner.rest_service.databasemodel.User;
+import org.springframework.hateoas.RepresentationModel;
 
-public class ScoreboardResponse implements Comparable<ScoreboardResponse>{
+public class ScoreboardResponse extends RepresentationModel<ScoreboardResponse> implements Comparable<ScoreboardResponse>{
     public UserResponse user;
     private final Long totalPoints;
 
