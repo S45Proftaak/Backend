@@ -1,6 +1,7 @@
 package com.foodplanner.rest_service.controller;
 
 import com.foodplanner.rest_service.databasemodel.Scoreboard;
+import com.foodplanner.rest_service.dtos.response.Scoreboard.OwnScoreBoardResponse;
 import com.foodplanner.rest_service.dtos.response.Scoreboard.ScoreboardResponse;
 import com.foodplanner.rest_service.endpoints.ScoreBoardEndpoint;
 import com.foodplanner.rest_service.logic.jwt.JwtTokenProvider;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @RestController
@@ -35,7 +37,7 @@ public class ScoreBoardController {
             response.add(new ScoreboardResponse(scoreboard.getUser(), (scoreboard.getPoints_in_time() + scoreboard.getPoints_too_late())));
         }
         Collections.sort(response, Collections.reverseOrder());
-        return new ResponseEntity<>(response.stream().limit(20), HttpStatus.OK);
+        return new ResponseEntity<>(response.stream().limit(3), HttpStatus.OK);
     }
 
     @GetMapping(ScoreBoardEndpoint.GET_SCOREBOARD_IN_TIME)
@@ -54,5 +56,14 @@ public class ScoreBoardController {
             response.add(new ScoreboardResponse(scoreboard.getUser(), scoreboard.getPoints_too_late()));
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(ScoreBoardEndpoint.GET_OWN_SCORES)
+    public ResponseEntity<?> getOwnScores(HttpServletRequest request){
+      String token = tokenProvider.resolveToken(request);
+      Scoreboard scoreboard = scoreBoardRepository.findByUser(userRepository.findById(tokenProvider.getUserIdFromToken(token)).get());
+      OwnScoreBoardResponse ownScoreBoardResponse = new OwnScoreBoardResponse(scoreboard.getUser().getName(), scoreboard.getUser().getEmail(), scoreboard.getUser().getRole().getName(), scoreboard.getPoints_in_time(),
+              scoreboard.getPoints_too_late());
+      return new ResponseEntity<>(ownScoreBoardResponse, HttpStatus.OK);
     }
 }
