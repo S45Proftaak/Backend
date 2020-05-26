@@ -9,6 +9,7 @@ import com.foodplanner.rest_service.ldap.Person;
 import com.foodplanner.rest_service.ldap.PersonRepository;
 import com.foodplanner.rest_service.logic.jwt.JwtTokenProvider;
 import com.foodplanner.rest_service.repositories.RoleRepository;
+import com.foodplanner.rest_service.repositories.ScoreBoardRepository;
 import com.foodplanner.rest_service.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,9 @@ public class UserController {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private ScoreBoardRepository scoreBoardRepository;
+
     User user = new User();
 
     @PostMapping(value = AuthEndpoint.LOGIN)
@@ -50,6 +54,11 @@ public class UserController {
                 } else {
                     setNewUser(dto.getEmail(), p.getFullName(), "ROLE_EMPLOYEE");
                     userRepository.save(user);
+                    User savedUser = userRepository.findByEmail(user.getEmail());
+                    Scoreboard scoreboard = new Scoreboard(0L, 0L, savedUser);
+                    scoreBoardRepository.save(scoreboard);
+                    savedUser.setScoreboard(scoreboard);
+                    userRepository.save(savedUser);
                     returnDTO.setToken(jwtTokenProvider.createToken(user.getId(), user.getName(), user.getRole().getName(), dto.getEmail()));
                     return new ResponseEntity<>(returnDTO, HttpStatus.OK); // return with token
                 }
@@ -61,6 +70,5 @@ public class UserController {
         user.setEmail(email);
         user.setName(name);
         user.setRole(roleRepository.findByName(role));
-        user.setScoreboard(new Scoreboard(0L, 0L, user));
     }
 }

@@ -8,9 +8,9 @@ spring:
     # In this example we use an embedded ldap server. When using a real one,
     # you can configure the settings here.
     #
-     urls: ldap://localhost:10389
-     base: ou=people,dc=example,dc=com
-     username: uid=admin,ou=system
+     urls: ldap://46.44.189.210:389
+     base: ou=people,dc=bonniebot
+     username: cn=admin,dc=bonniebot
      password: secret
 
     # Embedded Spring LDAP
