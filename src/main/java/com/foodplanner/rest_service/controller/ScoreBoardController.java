@@ -43,7 +43,7 @@ public class ScoreBoardController {
     @GetMapping(ScoreBoardEndpoint.GET_SCOREBOARD_IN_TIME)
     public ResponseEntity<?> getScoreboardInTime(){
         List<ScoreboardResponse> response = new ArrayList<>();
-        for(Scoreboard scoreboard : scoreBoardRepository.getTopTwentyInTime()){
+        for(Scoreboard scoreboard : scoreBoardRepository.getTopThreeInTime()){
             response.add(new ScoreboardResponse(scoreboard.getUser(), scoreboard.getPoints_in_time()));
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -52,7 +52,7 @@ public class ScoreBoardController {
     @GetMapping(ScoreBoardEndpoint.GET_SCOREBOARD_TOO_LATE)
     public ResponseEntity<?> getScoreboardTooLate(){
         List<ScoreboardResponse> response = new ArrayList<>();
-        for(Scoreboard scoreboard : scoreBoardRepository.getTopTwentyTooLate()){
+        for(Scoreboard scoreboard : scoreBoardRepository.getTopThreeTooLate()){
             response.add(new ScoreboardResponse(scoreboard.getUser(), scoreboard.getPoints_too_late()));
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -62,8 +62,23 @@ public class ScoreBoardController {
     public ResponseEntity<?> getOwnScores(HttpServletRequest request){
       String token = tokenProvider.resolveToken(request);
       Scoreboard scoreboard = scoreBoardRepository.findByUser(userRepository.findById(tokenProvider.getUserIdFromToken(token)).get());
+      List<Scoreboard> inTimeByOrder = scoreBoardRepository.getAllScoreboardsInTimeByOrder();
+      List<Scoreboard> tooLateByOrder = scoreBoardRepository.getAllScoreboardsTooLateOrder();
+
       OwnScoreBoardResponse ownScoreBoardResponse = new OwnScoreBoardResponse(scoreboard.getUser().getName(), scoreboard.getUser().getEmail(), scoreboard.getUser().getRole().getName(), scoreboard.getPoints_in_time(),
-              scoreboard.getPoints_too_late());
+             inTimeByOrder.indexOf(scoreboard) + 1, scoreboard.getPoints_too_late(), tooLateByOrder.indexOf(scoreboard) + 1, positionInScoreboard(scoreboard));
+
+
       return new ResponseEntity<>(ownScoreBoardResponse, HttpStatus.OK);
+    }
+
+    private Integer positionInScoreboard(Scoreboard scoreboard){
+        List<ScoreboardResponse> allByOrder = new ArrayList<>();
+        ScoreboardResponse selectedScoreboard = new ScoreboardResponse(scoreboard.getUser(), (scoreboard.getPoints_in_time() + scoreboard.getPoints_too_late()));
+        for(Scoreboard sc : scoreBoardRepository.findAll()){
+            allByOrder.add(new ScoreboardResponse(sc.getUser(), (sc.getPoints_in_time() + sc.getPoints_too_late())));
+        }
+        Collections.sort(allByOrder, Collections.reverseOrder());
+        return allByOrder.indexOf(selectedScoreboard) + 1;
     }
 }
