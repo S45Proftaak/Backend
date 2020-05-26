@@ -7,9 +7,11 @@ import com.foodplanner.rest_service.endpoints.ScoreBoardEndpoint;
 import com.foodplanner.rest_service.logic.jwt.JwtTokenProvider;
 import com.foodplanner.rest_service.repositories.ScoreBoardRepository;
 import com.foodplanner.rest_service.repositories.UserRepository;
+import com.foodplanner.rest_service.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,9 +61,9 @@ public class ScoreBoardController {
     }
 
     @GetMapping(ScoreBoardEndpoint.GET_OWN_SCORES)
-    public ResponseEntity<?> getOwnScores(HttpServletRequest request){
-      String token = tokenProvider.resolveToken(request);
-      Scoreboard scoreboard = scoreBoardRepository.findByUser(userRepository.findById(tokenProvider.getUserIdFromToken(token)).get());
+    public ResponseEntity<?> getOwnScores(Authentication authentication){
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+      Scoreboard scoreboard = scoreBoardRepository.findByUser(userRepository.findById(userDetails.getUser_id()).get());
       List<Scoreboard> inTimeByOrder = scoreBoardRepository.getAllScoreboardsInTimeByOrder();
       List<Scoreboard> tooLateByOrder = scoreBoardRepository.getAllScoreboardsTooLateOrder();
 
