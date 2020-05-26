@@ -13,6 +13,7 @@ import com.foodplanner.rest_service.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,12 +45,12 @@ public class UserController {
             Person p = ps.get(0);
             User dbUser = userRepository.findByEmail(dto.getEmail());
                 if (dbUser != null) {
-                    returnDTO.setToken(jwtTokenProvider.createToken(dbUser.getId(), dbUser.getName(), dbUser.getRole().getName()));
+                    returnDTO.setToken(jwtTokenProvider.createToken(dbUser.getId(), dbUser.getName(), dbUser.getRole().getName(), dto.getEmail()));
                     return new ResponseEntity<>(returnDTO, HttpStatus.OK);
                 } else {
-                    setNewUser(dto.getEmail(), p.getFullName(), "Employee");
+                    setNewUser(dto.getEmail(), p.getFullName(), "ROLE_EMPLOYEE");
                     userRepository.save(user);
-                   returnDTO.setToken(jwtTokenProvider.createToken(user.getId(), user.getName(), user.getRole().getName()));
+                    returnDTO.setToken(jwtTokenProvider.createToken(user.getId(), user.getName(), user.getRole().getName(), dto.getEmail()));
                     return new ResponseEntity<>(returnDTO, HttpStatus.OK); // return with token
                 }
         }

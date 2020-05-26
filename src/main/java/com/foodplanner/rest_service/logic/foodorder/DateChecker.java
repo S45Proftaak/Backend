@@ -25,10 +25,6 @@ public class DateChecker {
     public Boolean areYouToLate(Date date)
     {
         Date now = new Date();
-        if(now.after(date))
-        {
-            return true;
-        }
-        return false;
+        return now.after(date);
     }
 }
