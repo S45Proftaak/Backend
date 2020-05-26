@@ -91,7 +91,11 @@ public class FoodOrderController {
         }else{
             orderHandler.handleNewOrder(user, newOrderDTO, scoreboard, foodOrderRepository, scoreBoardRepository);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+
+        Link self = linkTo(methodOn(this.getClass()).addNewFoodOrder(newOrderDTO, request)).withSelfRel();
+        class response extends RepresentationModel<response> {}
+        response res = new response();
+        return new ResponseEntity<>(res.add(self), HttpStatus.OK);
     }
 
     @GetMapping(value = OrderEndpoint.GET_CURRENT_PRICE)
