@@ -12,7 +12,7 @@ import java.util.Set;
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
 @Table(name = "user", schema = "DeVoedselbank")
-@JsonIgnoreProperties({ "email", "scoreboard", "foodOrders"})
+@JsonIgnoreProperties({ "scoreboard", "foodOrders"})
 public class User {
     private int id;
     private String name;
