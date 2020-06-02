@@ -74,6 +74,4 @@ public class AdminController {
         RolesDTO dto = new RolesDTO(roles);
         return new ResponseEntity(roles, HttpStatus.OK);
     }
-
-
 }
