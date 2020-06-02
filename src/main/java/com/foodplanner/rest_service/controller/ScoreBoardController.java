@@ -42,6 +42,7 @@ public class ScoreBoardController {
             response.add(new ScoreboardResponse(scoreboard.getUser(), (scoreboard.getPoints_in_time() + scoreboard.getPoints_too_late())));
         }
         Link self = linkTo(methodOn(this.getClass()).getScoreboardMostEaten()).withSelfRel();
+        //TODO: Making sure the link shows up in the response.
         Collections.sort(response, Collections.reverseOrder());
         return new ResponseEntity<>(response.stream().limit(20), HttpStatus.OK);
     }

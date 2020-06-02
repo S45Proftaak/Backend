@@ -2,10 +2,12 @@ package com.foodplanner.rest_service.controller;
 
 import com.foodplanner.rest_service.databasemodel.FoodOrder;
 import com.foodplanner.rest_service.dtos.UserByDateDTO;
+import com.foodplanner.rest_service.dtos.secretary.response.GetUserByDateDTO;
 import com.foodplanner.rest_service.endpoints.SecretaryEndpoint;
 import com.foodplanner.rest_service.repositories.FoodOrderRepository;
 import com.foodplanner.rest_service.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @CrossOrigin
@@ -36,7 +41,8 @@ public class SecretaryController {
         for (FoodOrder order: orders) {
             dto.add(new UserByDateDTO(order.getUser().getName(), order.getDate(), order.getToLate()));
         }
-        return new ResponseEntity<>(dto, HttpStatus.OK);
+        Link self = linkTo(methodOn(this.getClass()).getUsersByDate(date)).withSelfRel();
+        return new ResponseEntity<>(new GetUserByDateDTO(dto).add(self), HttpStatus.OK);
     }
 
     @GetMapping(value = SecretaryEndpoint.GET_USERS_BETWEEN_DATES, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -46,7 +52,8 @@ public class SecretaryController {
         for (FoodOrder order: orders){
             dto.add(new UserByDateDTO(order.getUser().getName(), order.getDate(),order.getToLate()));
         }
-        return new ResponseEntity<>(dto, HttpStatus.OK);
+        Link self = linkTo(methodOn(this.getClass()).getUsersBetweenDates(start, end)).withSelfRel();
+        return new ResponseEntity<>(new GetUserByDateDTO(dto).add(self), HttpStatus.OK);
     }
 
 }
