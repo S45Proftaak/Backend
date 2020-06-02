@@ -6,4 +6,5 @@ public interface OrderEndpoint {
     String ORDERS_PER_WEEK = "/all-orders-per-week";
     String ADD_ORDER = "/add-order";
     String GET_CURRENT_PRICE = "/getCurrentPrice";
+    String GET_USERS_BY_DATE = "/getUsersByDate";
 }

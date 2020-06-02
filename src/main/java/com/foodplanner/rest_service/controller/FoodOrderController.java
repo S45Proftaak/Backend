@@ -20,6 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -84,5 +86,18 @@ public class FoodOrderController {
     public ResponseEntity<?> getCurrentPrice(){
         double currentPrice = configuration.getPrice();
         return new ResponseEntity(new GetPriceDTO(currentPrice), HttpStatus.OK);
+    }
+
+    @GetMapping(value = OrderEndpoint.GET_USERS_BY_DATE)
+    public ResponseEntity<?> getSimpleUserByDate(@RequestParam Date date){
+        class userName { public String name; public userName(String name){this.name = name;}}
+        class dto {public List<userName> users; public dto(List<userName> users){this.users = users;}}
+        Iterable<FoodOrder> order = foodOrderRepository.findAllByDate(date);
+        List<userName> users = new ArrayList<>();
+        for (FoodOrder food : order){
+            User u = food.getUser();
+            users.add(new userName(u.getName()));
+        }
+        return new ResponseEntity(new dto(users), HttpStatus.OK);
     }
 }

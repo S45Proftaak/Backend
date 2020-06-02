@@ -40,6 +40,10 @@ public class UserDetailsImpl implements UserDetails {
                 authorities);
     }
 
+    public int getUser_id() {
+        return user_id;
+    }
+
     @Override
     public String getPassword() {
         return null;

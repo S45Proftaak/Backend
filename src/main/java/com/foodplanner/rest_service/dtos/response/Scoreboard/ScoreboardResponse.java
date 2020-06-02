@@ -30,4 +30,14 @@ public class ScoreboardResponse implements Comparable<ScoreboardResponse>{
     public int compareTo(ScoreboardResponse o) {
         return this.totalPoints.compareTo(o.totalPoints);
     }
+
+    @Override
+    public boolean equals(Object t){
+        if(!(t instanceof ScoreboardResponse)){
+            return false;
+        }
+        ScoreboardResponse c = (ScoreboardResponse)t;
+        //Compare however you want, ie
+        return (c.getUser()).getName() == this.getUser().getName() && c.getUser().getRole() == this.getUser().getRole() && c.getUser().getUser_id() == this.getUser().getUser_id() && (c.getTotalPoints().equals(this.getTotalPoints()));
+    }
 }

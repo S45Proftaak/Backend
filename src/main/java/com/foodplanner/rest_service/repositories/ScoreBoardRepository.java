@@ -10,11 +10,17 @@ import java.util.List;
 public interface ScoreBoardRepository extends CrudRepository<Scoreboard, Integer> {
     Scoreboard findByUser(User user);
 
-    @Query(value = "SELECT * FROM `scoreboard` ORDER BY points_in_time DESC LIMIT 20",
+    @Query(value = "SELECT * FROM `scoreboard` ORDER BY points_in_time DESC LIMIT 3",
             nativeQuery = true)
-    List<Scoreboard> getTopTwentyInTime();
+    List<Scoreboard> getTopThreeInTime();
 
-    @Query(value = "SELECT * FROM `scoreboard` ORDER BY points_too_late DESC LIMIT 20",
+    @Query(value = "SELECT * FROM `scoreboard` ORDER BY points_too_late DESC LIMIT 3",
             nativeQuery = true)
-    List<Scoreboard> getTopTwentyTooLate();
+    List<Scoreboard> getTopThreeTooLate();
+
+    @Query(value = "SELECT * FROM `scoreboard` ORDER BY points_in_time DESC", nativeQuery = true)
+    List<Scoreboard> getAllScoreboardsInTimeByOrder();
+
+    @Query(value = "SELECT * FROM `scoreboard` ORDER BY points_too_late DESC", nativeQuery = true)
+    List<Scoreboard> getAllScoreboardsTooLateOrder();
 }
