@@ -8,4 +8,5 @@ public class OrderLinks {
     public String ORDERS_PER_WEEK = OrderEndpoint.ORDERS_PER_WEEK;
     public String ADD_ORDER = OrderEndpoint.ADD_ORDER;
     public String GET_CURRENT_PRICE = OrderEndpoint.GET_CURRENT_PRICE;
+    public String GET_USERS_BY_DATE = OrderEndpoint.GET_USERS_BY_DATE;
 }
