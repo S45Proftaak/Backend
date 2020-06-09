@@ -45,12 +45,6 @@ class UserTests {
     }
 
     @Test
-    void getRoleFromUser() {
-        List<Person> founduser = repository.findByName("Jahn Dae");
-        assertEquals("Secretary", founduser.get(0).getRole());
-    }
-
-    @Test
     void authenticateEmail()
     {
         assertTrue(repository.authenticateByEmail("testemail3@gmail.com", "secret"));
