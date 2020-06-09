@@ -57,7 +57,7 @@ public class FoodOrderController {
     @ResponseBody
     public ResponseEntity<?> getFoodOrdersPerWeek(@RequestParam List<String> dates, HttpServletRequest request) {
         String resolvedToken = tokenProvider.resolveToken(request);
-        if(dates.size() > 5){
+        if(dates.size() > 31){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         DateChecker checker = new DateChecker();

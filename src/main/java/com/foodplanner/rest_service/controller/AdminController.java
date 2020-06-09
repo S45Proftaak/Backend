@@ -61,11 +61,15 @@ public class AdminController {
     }
 
     @PutMapping(value = AdminEndpoints.UPDATE_USER_ROLE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void updateUserRole(@RequestBody UpdateUserRoleDTO dto){
-        User user = userRepository.findById(dto.getUserID()).get();
-        Role role = roleRepository.findById(dto.getRoleID()).get();
-        user.setRole(role);
-        userRepository.save(user);
+    public ResponseEntity<?> updateUserRole(@RequestBody UpdateUserRoleDTO dto){
+        if(roleRepository.findById(dto.getRoleID()).isPresent() && userRepository.findById(dto.getUserID()).isPresent()){
+            User user = userRepository.findById(dto.getUserID()).get();
+            Role role = roleRepository.findById(dto.getRoleID()).get();
+            user.setRole(role);
+            userRepository.save(user);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping(value = AdminEndpoints.GET_ROLES, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -74,6 +78,4 @@ public class AdminController {
         RolesDTO dto = new RolesDTO(roles);
         return new ResponseEntity(roles, HttpStatus.OK);
     }
-
-
 }
