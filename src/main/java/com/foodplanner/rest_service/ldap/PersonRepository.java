@@ -52,7 +52,7 @@ public class PersonRepository implements BaseLdapNameAware {
 
     public List<Person> findByName(String name) {
         LdapQuery q = query()
-                .where("objectclass").is("person")
+                .where("objectClass").is("person")
                 .and("cn").whitespaceWildcardsLike(name);
         return ldapTemplate.search(q, new PersonContextMapper());
     }
@@ -61,14 +61,14 @@ public class PersonRepository implements BaseLdapNameAware {
     {
         LdapQuery q = query()
                 .where("objectclass").is("person")
-                .and("email").whitespaceWildcardsLike(email);
+                .and("mail").whitespaceWildcardsLike(email);
         return ldapTemplate.search(q, new PersonContextMapper());
     }
 
     public Boolean authenticateByEmail(String email, String password)
     {
         AndFilter filter = new AndFilter();
-        filter.and(new EqualsFilter("objectclass", "person")).and(new EqualsFilter("email", email));
+        filter.and(new EqualsFilter("objectClass", "person")).and(new EqualsFilter("mail", email));
         return ldapTemplate.authenticate(DistinguishedName.EMPTY_PATH, filter.toString(), password);
     }
 
@@ -115,7 +115,7 @@ public class PersonRepository implements BaseLdapNameAware {
             person.setLastName(context.getStringAttribute("sn"));
             person.setUid(context.getStringAttribute("uid"));
             person.setPassword(context.getStringAttribute("password"));
-            person.setEmail(context.getStringAttribute("email"));
+            person.setEmail(context.getStringAttribute("mail"));
             person.setRole(context.getStringAttribute("role"));
             return person;
         }

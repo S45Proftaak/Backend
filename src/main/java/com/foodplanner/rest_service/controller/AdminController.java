@@ -8,7 +8,7 @@ import com.foodplanner.rest_service.dtos.administration.request.UpdatePriceDTO;
 import com.foodplanner.rest_service.dtos.administration.request.UpdateUserRoleDTO;
 import com.foodplanner.rest_service.dtos.administration.response.RolesDTO;
 import com.foodplanner.rest_service.dtos.administration.response.UsersDTO;
-import com.foodplanner.rest_service.endpoints.AdministrationEndpoints;
+import com.foodplanner.rest_service.endpoints.AdminEndpoints;
 import com.foodplanner.rest_service.exceptions.FileNotWritable;
 import com.foodplanner.rest_service.repositories.RoleRepository;
 import com.foodplanner.rest_service.repositories.UserRepository;
@@ -25,10 +25,10 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping(value = AdministrationEndpoints.BASE)
+@RequestMapping(value = AdminEndpoints.BASE)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
-public class AdministrationController {
+public class AdminController {
 
     @Autowired
     private PriceConfiguration priceConfiguration;
@@ -39,13 +39,13 @@ public class AdministrationController {
     @Autowired
     private RoleRepository roleRepository;
 
-    @PutMapping(value = AdministrationEndpoints.UPDATE_PRICE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = AdminEndpoints.UPDATE_PRICE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public void updatePrice(@RequestBody UpdatePriceDTO priceDTO) throws FileNotWritable {
         priceConfiguration.setPrice(priceDTO.getPrice());
         WritePropperties.writePropsToFile("configuration.price", priceDTO.getPrice(), "settings.properties");
     }
 
-    @GetMapping(value = AdministrationEndpoints.GET_ALL_USERS, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = AdminEndpoints.GET_ALL_USERS, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllUsers(){
         Iterable<User> users = userRepository.findAll();
 
@@ -60,7 +60,7 @@ public class AdministrationController {
         return new ResponseEntity(dto, HttpStatus.OK);
     }
 
-    @PutMapping(value = AdministrationEndpoints.UPDATE_USER_ROLE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = AdminEndpoints.UPDATE_USER_ROLE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public void updateUserRole(@RequestBody UpdateUserRoleDTO dto){
         User user = userRepository.findById(dto.getUserID()).get();
         Role role = roleRepository.findById(dto.getRoleID()).get();
@@ -68,7 +68,7 @@ public class AdministrationController {
         userRepository.save(user);
     }
 
-    @GetMapping(value = AdministrationEndpoints.GET_ROLES, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = AdminEndpoints.GET_ROLES, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getRoles(){
         Iterable<Role> roles = roleRepository.findAll();
         RolesDTO dto = new RolesDTO(roles);
