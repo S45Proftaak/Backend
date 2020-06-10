@@ -59,4 +59,9 @@ public class Role {
     public void setUsers(Collection<User> user) {
         this.users = user;
     }
+
+    public Role(Integer id, String name){
+        this.id = id;
+        this.name = name;
+    }
 }

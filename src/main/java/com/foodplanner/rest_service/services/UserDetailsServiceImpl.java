@@ -21,4 +21,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userRepository.findByEmail(email);
         return UserDetailsImpl.build(user);
     }
+
+    public UserDetails mockUser(User user){
+        return UserDetailsImpl.build(user);
+    }
 }

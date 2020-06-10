@@ -94,6 +94,13 @@ public class User {
 
     }
 
+    public User(Integer id, String name, String email, Role role){
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.role = role;
+    }
+
 
     private List<FoodOrder> foodOrders;
 
