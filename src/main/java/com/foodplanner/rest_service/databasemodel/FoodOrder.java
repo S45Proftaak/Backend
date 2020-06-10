@@ -87,6 +87,17 @@ public class FoodOrder {
                 Objects.equals(date, that.date);
     }
 
+    public FoodOrder(Integer id, User user, Date date, boolean tooLate){
+        this.id = id;
+        this.user = user;
+        this.date = date;
+        this.toLate = tooLate;
+    }
+
+    public FoodOrder(){
+
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(id, user, date, toLate);
