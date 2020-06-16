@@ -40,9 +40,13 @@ public class AdminController {
     private RoleRepository roleRepository;
 
     @PutMapping(value = AdminEndpoints.UPDATE_PRICE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void updatePrice(@RequestBody UpdatePriceDTO priceDTO) throws FileNotWritable {
+    public ResponseEntity<?> updatePrice(@RequestBody UpdatePriceDTO priceDTO) throws FileNotWritable {
+        if(priceDTO.getPrice() < 0){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         priceConfiguration.setPrice(priceDTO.getPrice());
         WritePropperties.writePropsToFile("configuration.price", priceDTO.getPrice(), "settings.properties");
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping(value = AdminEndpoints.GET_ALL_USERS, produces = MediaType.APPLICATION_JSON_VALUE)
