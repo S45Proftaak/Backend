@@ -20,8 +20,8 @@ class UserTests {
 
     @Test
     void findUserByEmailTest() {
-        List<Person> founduser = repository.findByEmail("testemail3@gmail.com");
-        assertEquals(founduser.get(0).getFullName(), "Jahn Dae");
+        List<Person> founduser = repository.findByEmail("rico@test.nl");
+        assertEquals(founduser.get(0).getFullName(), "Rico Muijtjens");
     }
 
     @Test
@@ -33,8 +33,8 @@ class UserTests {
 
     @Test
     void findUserByNameTest() {
-        List<Person> founduser = repository.findByName("Jahn Dae");
-        assertEquals("testemail3@gmail.com", founduser.get(0).getEmail());
+        List<Person> founduser = repository.findByName("Rico Muijtjens");
+        assertEquals("rico@test.nl", founduser.get(0).getEmail());
     }
 
     @Test
@@ -47,24 +47,6 @@ class UserTests {
     @Test
     void authenticateEmail()
     {
-        assertTrue(repository.authenticateByEmail("testemail3@gmail.com", "secret"));
-    }
-
-    @Test
-    void findAllPeopleCount() {
-        List<Person> allUsers = repository.findAll();
-        assertEquals(3, allUsers.size());
-    }
-
-    @Test
-    void createNewUserTestAll() {
-        Person person = new Person("Test User", "User", "Password", "unittestmail@gmail.com", "Admin");
-        assertEquals(0, repository.findByName("Test User").size());
-        assertTrue(repository.findByName("Test User").isEmpty());
-        repository.create(person);
-        assertEquals(1, repository.findByName("Test User").size());
-        repository.delete(person);
-        assertEquals(0, repository.findByName("Test User").size());
-        assertTrue(repository.findByName("Test User").isEmpty());
+        assertTrue(repository.authenticateByEmail("rico@test.nl", "secret"));
     }
 }
