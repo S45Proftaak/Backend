@@ -1,11 +1,5 @@
 package com.foodplanner.rest_service.ldap;
 
-import org.springframework.ldap.odm.annotations.Attribute;
-import org.springframework.ldap.odm.annotations.Entry;
-import org.springframework.ldap.odm.annotations.Id;
-
-import javax.naming.Name;
-
 public class Person {
 
     private String uid;

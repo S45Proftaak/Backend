@@ -1,7 +1,6 @@
 package com.foodplanner.rest_service.databasemodel;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.sql.Date;

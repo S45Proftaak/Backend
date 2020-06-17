@@ -1,8 +1,5 @@
 package com.foodplanner.rest_service.databasemodel;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import org.hibernate.engine.internal.Cascade;
-
 import javax.persistence.*;
 
 @SuppressWarnings({"JpaDataSourceORMInspection", "JpaObjectClassSignatureInspection"})

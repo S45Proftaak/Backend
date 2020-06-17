@@ -1,8 +1,5 @@
 package com.foodplanner.rest_service.dtos;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class LoginReturnDTO {
 
     String token;

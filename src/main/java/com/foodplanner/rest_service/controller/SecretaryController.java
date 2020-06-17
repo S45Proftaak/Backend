@@ -4,14 +4,12 @@ import com.foodplanner.rest_service.databasemodel.FoodOrder;
 import com.foodplanner.rest_service.dtos.UserByDateDTO;
 import com.foodplanner.rest_service.endpoints.SecretaryEndpoint;
 import com.foodplanner.rest_service.repositories.FoodOrderRepository;
-import com.foodplanner.rest_service.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
