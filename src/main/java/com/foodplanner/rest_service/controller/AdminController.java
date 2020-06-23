@@ -20,6 +20,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,10 +45,16 @@ public class AdminController {
 
     @PutMapping(value = AdminEndpoints.UPDATE_PRICE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updatePrice(@RequestBody UpdatePriceDTO priceDTO) throws FileNotWritable {
+        String text = Double.toString(Math.abs(priceDTO.getPrice()));
+        int integerPlaces = text.indexOf('.');
+        int decimalPlaces = text.length() - integerPlaces - 1;
         if(priceDTO.getPrice() < 0){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        priceConfiguration.setPrice(priceDTO.getPrice());
+        if(decimalPlaces > 2){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        priceConfiguration.setPrice(Double.parseDouble(text));
         WritePropperties.writePropsToFile("configuration.price", priceDTO.getPrice(), "settings.properties");
         return new ResponseEntity<>(HttpStatus.OK);
     }
